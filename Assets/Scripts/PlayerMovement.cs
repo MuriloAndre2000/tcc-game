@@ -1,0 +1,135 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class PlayerMovement : MonoBehaviour
+{
+    public float initialMovementSpeed = 5f; // Speed at which the character moves
+    public float movementSpeed; // Speed at which the character moves
+    public float rotationSpeed = 10f; // Speed at which the character rotates
+
+    private Rigidbody rb;
+
+    public LineRenderer lr;
+
+    public GameObject bulletPrefab;
+
+    public Vector3 worldPosition;
+    Plane plane = new Plane(Vector3.up, -1.5f);
+
+    public float time_to_shoot_again = 0f;
+
+    private bool stop_moving = false;
+    private GameObject player;   
+    private PlayerEXP player_exp;
+
+
+    private void Awake()
+    {
+        rb = GetComponent<Rigidbody>();
+    }
+
+    private void Update()
+    {
+        if (GameObject.FindWithTag("Player") is not null){
+            player = GameObject.FindWithTag("Player");
+            player_exp = player.GetComponent<PlayerEXP>();
+            stop_moving = player_exp.return_pause_all() ;
+            movementSpeed = (float) (1 + .1f*player_exp.return_power_up_speed_increase())*initialMovementSpeed;
+        }
+
+        if (stop_moving == false){
+
+            //Move
+            float horizontalInput = Input.GetAxis("Horizontal");
+            float verticalInput = Input.GetAxis("Vertical");
+            Vector3 movementDirection = new Vector3(horizontalInput, 0f, verticalInput);
+            rb.MovePosition(rb.position + movementDirection * movementSpeed * Time.deltaTime);
+
+            if (movementDirection != Vector3.zero)
+            {
+                Quaternion targetRotation = Quaternion.LookRotation(movementDirection);
+                transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
+            }
+
+            //Trying to understand mouse in In unity
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            float distance;
+            if (plane.Raycast(ray, out distance)){
+                worldPosition = ray.GetPoint(distance);
+            }
+            Vector3 start_ray = rb.position;
+            Vector3 end_ray = worldPosition;
+
+            lr = GetComponent<LineRenderer>();
+            lr.startWidth = 0.1f;
+            lr.endWidth = 0.1f;
+            lr.SetPosition(0, start_ray);
+            lr.SetPosition(1, end_ray);
+
+            if(PlayerWeaponChoosing.Weapon_ID == 1){
+                if (Input.GetMouseButtonDown(0) & time_to_shoot_again ==0){
+                    Vector3 fromDirection = (start_ray - end_ray).normalized;
+                    Quaternion direction = Quaternion.FromToRotation(Vector3.forward,fromDirection);
+                    direction *= Quaternion.Euler(0f, 180f, 0f);
+
+                    Vector3 bullet_position = rb.position + fromDirection*-1;
+
+                    GameObject newBullet = Instantiate(bulletPrefab, bullet_position, direction);
+                    newBullet.GetComponent<BulletMovement>().damage = (int) (1 + .1f*player_exp.return_power_up_bullet_damage()) *30;
+                    int bullet_size_increase = player_exp.return_power_up_bullet_size();
+                    newBullet.gameObject.transform.localScale += new Vector3(bullet_size_increase/10,bullet_size_increase/10,bullet_size_increase/10);
+                    Destroy(newBullet, 5);
+                    time_to_shoot_again = (float) .5f * Mathf.Pow(.99f, player_exp.return_power_up_fire_rate_increase());
+                }
+            }
+            if(PlayerWeaponChoosing.Weapon_ID == 2){
+                if (Input.GetMouseButton(0) & time_to_shoot_again ==0){
+                    Vector3 fromDirection = (start_ray - end_ray).normalized;
+                    Quaternion direction = Quaternion.FromToRotation(Vector3.forward,fromDirection);
+                    direction *= Quaternion.Euler(0f, 180f, 0f);
+
+                    Vector3 bullet_position = rb.position + fromDirection*-1;
+
+                    GameObject newBullet = Instantiate(bulletPrefab, bullet_position, direction);
+                    newBullet.GetComponent<BulletMovement>().damage = (int) (1 + .1f*player_exp.return_power_up_bullet_damage()) * 25;
+
+                    int bullet_size_increase = player_exp.return_power_up_bullet_size();
+                    newBullet.gameObject.transform.localScale += new Vector3(bullet_size_increase/10,bullet_size_increase/10,bullet_size_increase/10);
+                    
+                    Destroy(newBullet, 5);
+                    time_to_shoot_again = (float) .25f * Mathf.Pow(.99f, player_exp.return_power_up_fire_rate_increase());;
+                }
+            }
+            if(PlayerWeaponChoosing.Weapon_ID == 3){
+                if (Input.GetMouseButton(0) & time_to_shoot_again ==0){
+                    float[] directions = {-20f,-10f,0f,10f,20f};
+                        for(int i = 0; i < 5 ;i++){
+                            Vector3 fromDirection = (start_ray - end_ray).normalized;
+                            Quaternion direction = Quaternion.FromToRotation(Vector3.forward,fromDirection);
+                            direction *= Quaternion.Euler(0f, 180f, 0f);
+                            direction *= Quaternion.Euler(0f, directions[i], 0f);
+
+                            Vector3 bullet_position = rb.position + fromDirection*-1;
+
+                            GameObject newBullet = Instantiate(bulletPrefab, bullet_position, direction);
+                            newBullet.GetComponent<BulletMovement>().damage = (int) (1 + .1f*player_exp.return_power_up_bullet_damage()) * 20;
+                            
+                            int bullet_size_increase = player_exp.return_power_up_bullet_size();
+                            newBullet.gameObject.transform.localScale += new Vector3(bullet_size_increase/10,bullet_size_increase/10,bullet_size_increase/10);
+                    
+                            Destroy(newBullet, 5);
+                    }
+                    time_to_shoot_again = (float) 1.5f * Mathf.Pow(.99f, player_exp.return_power_up_fire_rate_increase());;
+                }
+            }
+
+            if (time_to_shoot_again < 0){
+                time_to_shoot_again = 0f;
+            }
+            if (time_to_shoot_again > 0){
+                time_to_shoot_again -= Time.deltaTime;
+            }
+        }
+    }
+}
