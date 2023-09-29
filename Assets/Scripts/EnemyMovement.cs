@@ -8,6 +8,7 @@ public class EnemyMovement : MonoBehaviour
     public Transform player_transform;
     private float distance;
     private float time_to_attack_again = 0f;
+    private float rotationSpeed = 10f;
 
     private GameObject player;
     private PlayerEXP player_exp;
@@ -29,6 +30,9 @@ public class EnemyMovement : MonoBehaviour
 
                 // Move the enemy towards the player
                 transform.position += directionToPlayer * movementSpeed * Time.deltaTime;
+                Quaternion targetRotation = Quaternion.LookRotation(directionToPlayer);
+                //targetRotation *= Quaternion.Euler(0f, 180f, 0f);
+                transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
 
                 if (distance < 1.5 & time_to_attack_again == 0){
                     PlayerHealth playerHealth = GameObject.FindWithTag("Player").GetComponent<PlayerHealth>();

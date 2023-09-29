@@ -4,7 +4,7 @@ using System.IO;
 public class CameraMovement : MonoBehaviour
 {
     public Transform target; // Reference to the character's transform
-    public Vector3 offset = new Vector3(0f, 16f, 0f); // Offset from the character's position
+    public Vector3 offset = new Vector3(0f, 14f, 0f); // Offset from the character's position
 
     public float smoothSpeed = 1f; // Speed at which the camera follows the character
     public float rotationSpeed = 0f; // Speed at which the camera rotates
