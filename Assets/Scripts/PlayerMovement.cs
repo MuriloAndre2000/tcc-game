@@ -47,11 +47,11 @@ public class PlayerMovement : MonoBehaviour
             Vector3 movementDirection = new Vector3(horizontalInput, 0f, verticalInput);
             rb.MovePosition(rb.position + movementDirection * movementSpeed * Time.deltaTime);
 
-            if (movementDirection != Vector3.zero)
-            {
-                Quaternion targetRotation = Quaternion.LookRotation(movementDirection);
-                transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
-            }
+            //if (movementDirection != Vector3.zero)
+            //{
+            //    Quaternion targetRotation = Quaternion.LookRotation(movementDirection);
+            //    transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
+            //}
 
             //Trying to understand mouse in In unity
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -68,9 +68,14 @@ public class PlayerMovement : MonoBehaviour
             lr.SetPosition(0, start_ray);
             lr.SetPosition(1, end_ray);
 
+            Vector3 fromDirection = (start_ray - end_ray).normalized;
+            Quaternion targetRotation = Quaternion.LookRotation(fromDirection);
+            targetRotation *= Quaternion.Euler(0f, 180f, 0f);
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
+
             if(PlayerWeaponChoosing.Weapon_ID == 1){
                 if (Input.GetMouseButton(0) & time_to_shoot_again ==0){
-                    Vector3 fromDirection = (start_ray - end_ray).normalized;
+                    fromDirection = (start_ray - end_ray).normalized;
                     Quaternion direction = Quaternion.FromToRotation(Vector3.forward,fromDirection);
                     direction *= Quaternion.Euler(0f, 180f, 0f);
 
@@ -86,7 +91,7 @@ public class PlayerMovement : MonoBehaviour
             }
             if(PlayerWeaponChoosing.Weapon_ID == 2){
                 if (Input.GetMouseButton(0) & time_to_shoot_again ==0){
-                    Vector3 fromDirection = (start_ray - end_ray).normalized;
+                    fromDirection = (start_ray - end_ray).normalized;
                     Quaternion direction = Quaternion.FromToRotation(Vector3.forward,fromDirection);
                     direction *= Quaternion.Euler(0f, 180f, 0f);
 
@@ -106,7 +111,7 @@ public class PlayerMovement : MonoBehaviour
                 if (Input.GetMouseButton(0) & time_to_shoot_again ==0){
                     float[] directions = {-20f,-10f,0f,10f,20f};
                         for(int i = 0; i < 5 ;i++){
-                            Vector3 fromDirection = (start_ray - end_ray).normalized;
+                            fromDirection = (start_ray - end_ray).normalized;
                             Quaternion direction = Quaternion.FromToRotation(Vector3.forward,fromDirection);
                             direction *= Quaternion.Euler(0f, 180f, 0f);
                             direction *= Quaternion.Euler(0f, directions[i], 0f);
@@ -127,7 +132,7 @@ public class PlayerMovement : MonoBehaviour
 
             if(PlayerWeaponChoosing.Weapon_ID == 4){
                 if (Input.GetMouseButton(0) & time_to_shoot_again ==0){
-                    Vector3 fromDirection = (start_ray - end_ray).normalized;
+                    fromDirection = (start_ray - end_ray).normalized;
                     Quaternion direction = Quaternion.FromToRotation(Vector3.forward,fromDirection);
                     direction *= Quaternion.Euler(0f, 180f, 0f);
 
