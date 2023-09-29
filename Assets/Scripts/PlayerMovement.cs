@@ -13,6 +13,7 @@ public class PlayerMovement : MonoBehaviour
     public LineRenderer lr;
 
     public GameObject bulletPrefab;
+    public GameObject granadePrefab;
 
     public Vector3 worldPosition;
     Plane plane = new Plane(Vector3.up, -1.5f);
@@ -68,7 +69,7 @@ public class PlayerMovement : MonoBehaviour
             lr.SetPosition(1, end_ray);
 
             if(PlayerWeaponChoosing.Weapon_ID == 1){
-                if (Input.GetMouseButtonDown(0) & time_to_shoot_again ==0){
+                if (Input.GetMouseButton(0) & time_to_shoot_again ==0){
                     Vector3 fromDirection = (start_ray - end_ray).normalized;
                     Quaternion direction = Quaternion.FromToRotation(Vector3.forward,fromDirection);
                     direction *= Quaternion.Euler(0f, 180f, 0f);
@@ -121,6 +122,25 @@ public class PlayerMovement : MonoBehaviour
                             Destroy(newBullet, 5);
                     }
                     time_to_shoot_again = (float) 1.5f * Mathf.Pow(.99f, player_exp.return_power_up_fire_rate_increase());;
+                }
+            }
+
+            if(PlayerWeaponChoosing.Weapon_ID == 4){
+                if (Input.GetMouseButton(0) & time_to_shoot_again ==0){
+                    Vector3 fromDirection = (start_ray - end_ray).normalized;
+                    Quaternion direction = Quaternion.FromToRotation(Vector3.forward,fromDirection);
+                    direction *= Quaternion.Euler(0f, 180f, 0f);
+
+                    Vector3 bullet_position = rb.position + fromDirection*-1;
+
+                    GameObject newGranade = Instantiate(granadePrefab, bullet_position, direction);
+                    //newGranade.GetComponent<BulletMovement>().damage = (int) (1 + .1f*player_exp.return_power_up_bullet_damage()) * 25;
+
+                    int granade_size_increase = player_exp.return_power_up_bullet_size();
+                    newGranade.gameObject.transform.localScale += new Vector3(granade_size_increase/10,granade_size_increase/10,granade_size_increase/10);
+                    
+                    Destroy(newGranade, 5);
+                    time_to_shoot_again = (float) 2f * Mathf.Pow(.99f, player_exp.return_power_up_fire_rate_increase());;
                 }
             }
 
