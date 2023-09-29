@@ -19,6 +19,10 @@ public class EnemyRendering : MonoBehaviour
             int LayerEnemy = LayerMask.NameToLayer("Enemy2");
             
             gameObject.layer = LayerEnemy;
+            foreach (Transform child in transform)
+             {
+                child.gameObject.layer = LayerEnemy;
+             }
             //Debug.Log("Current layer: " + gameObject.layer);
             currentTimeToRender -= Time.deltaTime;
         }
@@ -29,6 +33,10 @@ public class EnemyRendering : MonoBehaviour
         else if (currentTimeToRender == 0){
             int LayerIgnoreCamera = LayerMask.NameToLayer("Ignore Camera");
             gameObject.layer = LayerIgnoreCamera;
+            foreach (Transform child in transform)
+             {
+                child.gameObject.layer = LayerIgnoreCamera;
+             }
             //Debug.Log("Current layer: " + gameObject.layer);
         }
         
