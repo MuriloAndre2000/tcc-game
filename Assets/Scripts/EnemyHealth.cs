@@ -14,16 +14,16 @@ public class EnemyHealth : MonoBehaviour
     private void Start()
     {
         currentHealth = maxHealth;
-        enemyCanvas = gameObject.transform.Find("Canvas").gameObject;
-        green = enemyCanvas.transform.Find("Green").gameObject;
-        healthBar = green.GetComponent<RectTransform>();
-        healthBar.sizeDelta = new Vector2(healthBar.sizeDelta.x,3*currentHealth/maxHealth);
+        //enemyCanvas = gameObject.transform.Find("Canvas").gameObject;
+        //green = enemyCanvas.transform.Find("Green").gameObject;
+        //healthBar = green.GetComponent<RectTransform>();
+        //healthBar.sizeDelta = new Vector2(healthBar.sizeDelta.x,3*currentHealth/maxHealth);
     }
 
     public void TakeDamage(int damageAmount)
     {
         currentHealth -= damageAmount;
-        healthBar.sizeDelta = new Vector2(healthBar.sizeDelta.x,3*currentHealth/maxHealth);
+        //healthBar.sizeDelta = new Vector2(healthBar.sizeDelta.x,3*currentHealth/maxHealth);
 
         // Check if the enemy is dead
         if (currentHealth <= 0)
