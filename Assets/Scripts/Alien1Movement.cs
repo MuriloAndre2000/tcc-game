@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyMovement : MonoBehaviour
+public class Alien1Movement : MonoBehaviour
 {
     public float movementSpeed = 3f;
     public Transform player_transform;
