@@ -75,10 +75,10 @@ public class PlayerEXP : MonoBehaviour
             if(Camera.main.ScreenPointToRay(Input.mousePosition).direction[0] < 0){
                 Debug.Log("Escolheu a opção 1");
                 if(option_1_text == "power_up_bullet_damage"){
-                    power_up_bullet_damage++;
+                    power_up_bullet_damage += 3;
                 }
                 if(option_1_text == "power_up_bullet_size"){
-                    power_up_bullet_size++;
+                    power_up_bullet_size += 3;
                 }
                 if(option_1_text == "power_up_health_increase"){
                     power_up_health_increase++;
@@ -93,13 +93,13 @@ public class PlayerEXP : MonoBehaviour
                     }
                 }
                 if(option_1_text == "power_up_fire_rate_increase"){
-                    power_up_fire_rate_increase++;
+                    power_up_fire_rate_increase += 3;
                 }
                 if(option_1_text == "power_up_speed_increase"){
-                    power_up_speed_increase++;
+                    power_up_speed_increase += 3;
                 }
                 if(option_1_text == "power_up_field_radius"){
-                    power_up_field_radius++;
+                    power_up_field_radius += 3;
                 }
                 pause_all = false;
             }
