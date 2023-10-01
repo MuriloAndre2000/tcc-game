@@ -3413,7 +3413,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 1129404959}
-  offset: {x: 0, y: 20, z: 0}
+  offset: {x: 0, y: 15, z: 0}
   smoothSpeed: 0.5
   rotationSpeed: 5
 --- !u!114 &963194230
@@ -4008,7 +4008,7 @@ Transform:
   m_GameObject: {fileID: 1129404949}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 5, y: 1, z: 0}
+  m_LocalPosition: {x: 15, y: 1, z: -26.2}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -8638,7 +8638,7 @@ GameObject:
   - component: {fileID: 6374920088701855280}
   m_Layer: 6
   m_Name: Reptile_Alien_Creature_Spikes
-  m_TagString: Enemy
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -8698,7 +8698,7 @@ GameObject:
   - component: {fileID: 1155880802306516302}
   m_Layer: 6
   m_Name: Reptile_Alien_Creature_Body
-  m_TagString: Enemy
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -8869,7 +8869,7 @@ GameObject:
   - component: {fileID: 2826323561846972553}
   m_Layer: 6
   m_Name: Reptile_Alien_Creature_Monster_Eyes
-  m_TagString: Enemy
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -8883,7 +8883,7 @@ Transform:
   m_GameObject: {fileID: 7496662534224318151}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 16.13, y: 2.89, z: 2.54}
+  m_LocalPosition: {x: 16.13, y: 2.89, z: -21.7}
   m_LocalScale: {x: 0.012, y: 0.012, z: 0.012}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -8903,7 +8903,7 @@ GameObject:
   - component: {fileID: 6662543814462000926}
   m_Layer: 6
   m_Name: Mouth_Saliva_Reptile_Alien_Creature
-  m_TagString: Enemy
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -8923,7 +8923,7 @@ GameObject:
   - component: {fileID: 7496662534224318153}
   - component: {fileID: 7496662534224318152}
   m_Layer: 6
-  m_Name: fauna2
+  m_Name: Enemy2
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8951,7 +8951,7 @@ Rigidbody:
     m_Bits: 0
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
-  m_UseGravity: 0
+  m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
@@ -8976,7 +8976,7 @@ BoxCollider:
   m_Enabled: 1
   serializedVersion: 3
   m_Size: {x: 90, y: 250, z: 90}
-  m_Center: {x: -20, y: 0, z: -20}
+  m_Center: {x: -20, y: -30, z: -20}
 --- !u!114 &7496662534224318154
 MonoBehaviour:
   m_ObjectHideFlags: 0
