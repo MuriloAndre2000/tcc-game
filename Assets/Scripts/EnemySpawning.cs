@@ -14,6 +14,9 @@ public class EnemySpawning : MonoBehaviour
 
     private bool stop_spawning = false;
 
+    private int min_radius = 6;
+    private int max_radius = 8;
+
     // Update is called once per frame
     void Update()
     {
@@ -21,36 +24,28 @@ public class EnemySpawning : MonoBehaviour
             player = GameObject.FindWithTag("Player");
             player_exp = player.GetComponent<PlayerEXP>();
             stop_spawning = player_exp.return_pause_all();
-            max_enemies = 20 + player_exp.return_level();
+            max_enemies = 50 + player_exp.return_level();
         }
         if (stop_spawning == false){
             if (TimeToRespawn >= 0){
                 TimeToRespawn -= Time.deltaTime;
             }
             if (TimeToRespawn < 0f & GameObject.FindGameObjectsWithTag("Enemy").Length <= max_enemies){
-                float[ ] x = new float[ ] {40.05f,
-                                           40.05f,
-                                           96f,
-                                           95f,
-                                           95f,
-                                           -15f,
-                                           -15f,
-                                           -15f
-                                                };
-                float[ ] z = new float[ ] { 7.26f,
-                                           -75.77f,
-                                           -68f,
-                                           -34f,
-                                            0f,
-                                            0f,
-                                            -34f,
-                                            -69f
-                                                };
-                int randomNumber = Random.Range(0, 8);
-                Vector3 enemy_position = new Vector3 (x[randomNumber], 2, z[randomNumber]);
+                float randomNumber_X = Random.Range(player.transform.position[0] + min_radius, 
+                                                    player.transform.position[0] + max_radius);
+                
+                float randomNumber_Z = Random.Range(player.transform.position[2] + min_radius, 
+                                                    player.transform.position[2] + max_radius);
+
+                int angle = Random.Range(0,360);
+                randomNumber_X = Mathf.Sin(angle)* randomNumber_X;
+                randomNumber_Z = Mathf.Sin(angle)* randomNumber_Z;
+
+                Vector3 enemy_position = new Vector3 (randomNumber_X, 2, randomNumber_Z);
+
                 GameObject newEnemy = Instantiate(enemyPrefab, enemy_position, Quaternion.identity);
                 Destroy(newEnemy, 60);
-                TimeToRespawn = 1.5f * Mathf.Pow(.99f, player_exp.return_level());
+                TimeToRespawn = 1f * Mathf.Pow(.99f, player_exp.return_level());
             }        
         }
 
