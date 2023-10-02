@@ -2,8 +2,8 @@ using UnityEngine;
 
 public class PlayerHealth : MonoBehaviour
 {
-    private int maxHealth = 100;
-    public int currentHealth;
+    private float maxHealth = 100.0f;
+    public float currentHealth;
     private GameObject playerCanvas;
     private GameObject green;
     private RectTransform healthBar;
