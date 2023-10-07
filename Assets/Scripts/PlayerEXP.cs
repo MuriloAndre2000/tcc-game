@@ -233,8 +233,8 @@ public class PlayerEXP : MonoBehaviour
         }
 
         if(pause_all == false){
-            Option_1_Transform.anchoredPosition  = new Vector2(-1000,0);
-            Option_2_Transform.anchoredPosition  = new Vector2(1000,0);
+            Option_1_Transform.anchoredPosition  = new Vector2(-2000,0);
+            Option_2_Transform.anchoredPosition  = new Vector2(2000,0);
         }
         else{
             Option_1_Transform.anchoredPosition  = new Vector2(-250,0);
