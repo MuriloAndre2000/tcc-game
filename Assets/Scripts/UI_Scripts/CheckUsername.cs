@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
 using TMPro;
 using UnityEditor;
@@ -11,6 +12,12 @@ public class CheckUsername : MonoBehaviour
     public class Info{
         public string username;
         public int accept;
+    }
+    public void Start(){
+        if(System.IO.File.Exists(Application.persistentDataPath + "/credentials.json")){
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+
+        };
     }
 
     public void ClickIniciarJogo()
@@ -38,6 +45,29 @@ public class CheckUsername : MonoBehaviour
             string str_info = JsonUtility.ToJson(user_info);
             Debug.Log(Application.persistentDataPath);
             System.IO.File.WriteAllText(Application.persistentDataPath + "/credentials.json", str_info);
+            
+            string url = "https://southamerica-east1-disco-bedrock-364702.cloudfunctions.net/add_usernames"; // Replace with your API endpoint
+            string json = str_info;
+            byte[] jsonBytes = System.Text.Encoding.UTF8.GetBytes(json);
+
+            UnityWebRequest request = new UnityWebRequest(url, "POST");
+            request.uploadHandler = (UploadHandler)new UploadHandlerRaw(jsonBytes);
+            request.downloadHandler = (DownloadHandler)new DownloadHandlerBuffer();
+            request.SetRequestHeader("Content-Type", "application/json");
+
+
+
+            request.SendWebRequest();
+
+            if (request.result == UnityWebRequest.Result.Success)
+            {
+                Debug.Log("POST request successful!");
+                Debug.Log(request.downloadHandler.text); // Response from server
+            }
+            else
+            {
+                Debug.LogError("Error: " + request.error);
+            }
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
         }
     }
