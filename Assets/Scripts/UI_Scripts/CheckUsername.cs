@@ -35,7 +35,7 @@ public class CheckUsername : MonoBehaviour
             accept_bool = 0;
         }
         if(username == ""){
-            EditorUtility.DisplayDialog ("Alerta", "Por Favor digite um username não vazio", "Ok"); 
+            //EditorUtility.DisplayDialog ("Alerta", "Por Favor digite um username não vazio", "Ok"); 
             Debug.Log(accept_bool);
         }
         else{
