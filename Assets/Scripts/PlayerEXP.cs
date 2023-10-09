@@ -43,6 +43,9 @@ public class PlayerEXP : MonoBehaviour
             player_exp -= level_step;
             player_level += 1;
             pause_all = true;
+            if (level_step < 12){
+                level_step += 3;
+            }
         }
         XP_Bar.sizeDelta = new Vector2(40*player_exp,4);
 
@@ -55,15 +58,19 @@ public class PlayerEXP : MonoBehaviour
     private void assign_random_options(){
 
         if(pause_all == false){
-            int randomNumber = Random.Range(0, 6);
-            string[ ] options = new string[ ] {"power_up_bullet_damage", "power_up_bullet_size", 
-                                      "power_up_health_increase", "power_up_fire_rate_increase", 
-                                      "power_up_speed_increase", "power_up_field_radius"};
+            int randomNumber = Random.Range(0, 5);
+            string[ ] options = new string[ ] {
+                                                "power_up_bullet_damage", 
+                                                "power_up_bullet_size", 
+                                                "power_up_health_increase", 
+                                                "power_up_fire_rate_increase", 
+                                                //"power_up_speed_increase", 
+                                                "power_up_field_radius"};
             
             option_1_text = options[randomNumber];
             option_2_text = options[randomNumber];
             while (option_1_text == option_2_text){
-                randomNumber = Random.Range(0, 6);
+                randomNumber = Random.Range(0, 5);
                 option_2_text = options[randomNumber];
             }
         }
