@@ -13,6 +13,7 @@ public class Alien1Movement : MonoBehaviour
     private GameObject player;
     private PlayerEXP player_exp;
 
+    public bool is_spawned = false;
 
     // Update is called once per frame
     void Update()
@@ -20,6 +21,11 @@ public class Alien1Movement : MonoBehaviour
         if (GameObject.FindWithTag("Player") is not null){
             player = GameObject.FindWithTag("Player");
             player_exp = player.GetComponent<PlayerEXP>();
+            if(is_spawned == true & transform.position.y < -100){
+                Destroy(gameObject);
+                EnemySpawning enemy_spawning = Camera.main.gameObject.GetComponent<EnemySpawning>();
+                enemy_spawning.enemys_to_spawn_in_wave += 1;
+            }
 
             if (player_exp.return_pause_all() == false) {
                 player_transform = GameObject.FindWithTag("Player").transform;
