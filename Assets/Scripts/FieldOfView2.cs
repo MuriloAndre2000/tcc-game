@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-public class FieldOfView : MonoBehaviour {
+public class FieldOfView2 : MonoBehaviour {
 
     public float initialviewRadius = 8f;
     public float viewRadius;
@@ -27,34 +27,30 @@ public class FieldOfView : MonoBehaviour {
     private GameObject player;
     private PlayerEXP player_exp;
 
-    private float updateInterval = .02f; // Set your desired update interval here
-    private float updateTimer = 0f;
-
-
     void Start() {
         viewMesh = new Mesh ();
         viewMesh.name = "View Mesh";
         viewMeshFilter.mesh = viewMesh;
         viewRadius = initialviewRadius;
+
+        StartCoroutine ("FindTargetsWithDelay", .2f);
     }
 
-    void Update() {
-        updateTimer += Time.deltaTime;
 
-        if (updateTimer >= updateInterval) {
-            updateTimer = 0f;
-            //FindVisibleTargets();
-            DrawFieldOfView ();
+    IEnumerator FindTargetsWithDelay(float delay) {
+        while (true) {
+            yield return new WaitForSeconds (delay);
+            FindVisibleTargets ();
         }
+    }
 
+    void LateUpdate() {
         if (GameObject.FindWithTag("Player") is not null){
             player = GameObject.FindWithTag("Player");
             player_exp = player.GetComponent<PlayerEXP>();
             viewRadius = initialviewRadius + player_exp.return_power_up_field_radius();
         }
-
-        //DrawFieldOfView ();
-        FindVisibleTargets();
+        DrawFieldOfView ();
     }
 
     void FindVisibleTargets() {
