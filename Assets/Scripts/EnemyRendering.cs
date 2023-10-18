@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class EnemyRendering : MonoBehaviour
 {
-    private float timeToRender = 3f;
+    private float timeToRender = 1f;
     public float currentTimeToRender; 
     // Start is called before the first frame update
     void Start()
