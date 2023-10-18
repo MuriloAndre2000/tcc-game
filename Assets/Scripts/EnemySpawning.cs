@@ -4,10 +4,12 @@ using UnityEngine;
 using UnityEngine.Networking;
 using System.IO;
 
+
 public class EnemySpawning : MonoBehaviour
 {
     public GameObject enemyPrefab;
     public GameObject enemyPrefab2;
+    public GameObject enemyPrefab3;
     public float TimeToRespawn = 1f;
 
     public int max_enemies = 20;
@@ -17,14 +19,16 @@ public class EnemySpawning : MonoBehaviour
 
     private bool stop_spawning = false;
 
-    private int min_radius = 6;
-    private int max_radius = 8;
+    //private int min_radius = 6;
+    //private int max_radius = 8;
 
     public int wave = 0;
     public int enemys_to_spawn_in_wave = 0;
 
     private Camera camera_1;
     private GameObject Canvas;
+
+    private GameObject[] enemy_spawning;
 
     [System.Serializable]
     public class wave_info{
@@ -42,6 +46,8 @@ public class EnemySpawning : MonoBehaviour
     {
         camera_1 =  Camera.main;
         Canvas = camera_1.gameObject.transform.Find("Canvas").gameObject;
+        enemy_spawning = GameObject.FindGameObjectsWithTag("Enemy Portal");
+        Debug.Log(enemy_spawning);
     }
 
     // Update is called once per frame
@@ -51,7 +57,7 @@ public class EnemySpawning : MonoBehaviour
             player = GameObject.FindWithTag("Player");
             player_exp = player.GetComponent<PlayerEXP>();
             stop_spawning = player_exp.return_pause_all();
-            max_enemies = 30 + player_exp.return_level();
+            max_enemies = 30 + (int) Mathf.Pow(2, player_exp.return_level());
             //Debug.Log(GameObject.FindGameObjectsWithTag("Enemy").Length);
 
             Canvas = camera_1.gameObject.transform.Find("Canvas").gameObject;
@@ -67,7 +73,7 @@ public class EnemySpawning : MonoBehaviour
                 TimeToRespawn -= Time.deltaTime;
             }
             if (enemys_to_spawn_in_wave == 0){
-                if(GameObject.FindGameObjectsWithTag("Enemy").Length == 2){ // Apenas os Prefabs
+                if(GameObject.FindGameObjectsWithTag("Enemy").Length == 3){ // Apenas os Prefabs
                     wave += 1;
                     enemys_to_spawn_in_wave = (int) Mathf.Pow(3, wave);
 
@@ -110,24 +116,27 @@ public class EnemySpawning : MonoBehaviour
                 & enemys_to_spawn_in_wave > 0){
 
                 int enemy_choosen = 0;
-                if (wave > 3){
+                if (wave >= 4 & wave <= 6){
                     int random_enemy = Random.Range(0,10);
                     if(random_enemy >=8){
                         enemy_choosen = 1;
                     }
                 }
+                if(wave >= 7 & wave <= 10){
+                    int random_enemy = Random.Range(0,10);
+                    if(random_enemy >=4 & random_enemy <=7){
+                        enemy_choosen = 1;
+                    }
+                    if(random_enemy >=8){
+                        enemy_choosen = 2;
+                    }
+                }
 
                 if(enemy_choosen == 0){
-                    float randomNumber_X = Random.Range(player.transform.position[0] + min_radius, 
-                                                        player.transform.position[0] + max_radius);
+                    int index = Random.Range(0, enemy_spawning.Length);
+                    float randomNumber_X = enemy_spawning[index].transform.position[0];
                     
-                    float randomNumber_Z = Random.Range(player.transform.position[2] + min_radius, 
-                                                        player.transform.position[2] + max_radius);
-
-                    int angle = Random.Range(0,360);
-                    //Debug.Log(Mathf.Sin(angle));
-                    randomNumber_X = Mathf.Sin(angle)* randomNumber_X;
-                    randomNumber_Z = Mathf.Cos(angle)* randomNumber_Z;
+                    float randomNumber_Z = enemy_spawning[index].transform.position[2];
 
                     Vector3 enemy_position = new Vector3 (randomNumber_X, 2, randomNumber_Z);
 
@@ -138,15 +147,10 @@ public class EnemySpawning : MonoBehaviour
                     enemys_to_spawn_in_wave -= 1;
                 }
                 if(enemy_choosen == 1){
-                    float randomNumber_X = Random.Range(player.transform.position[0] + min_radius, 
-                                                        player.transform.position[0] + max_radius);
+                    int index = Random.Range(0, enemy_spawning.Length);
+                    float randomNumber_X = enemy_spawning[index].transform.position[0];
                     
-                    float randomNumber_Z = Random.Range(player.transform.position[2] + min_radius, 
-                                                        player.transform.position[2] + max_radius);
-
-                    int angle = Random.Range(0,360);
-                    randomNumber_X = Mathf.Sin(angle)* randomNumber_X;
-                    randomNumber_Z = Mathf.Sin(angle)* randomNumber_Z;
+                    float randomNumber_Z = enemy_spawning[index].transform.position[2];
 
                     Vector3 enemy_position = new Vector3 (randomNumber_X, 2, randomNumber_Z);
 
@@ -155,6 +159,34 @@ public class EnemySpawning : MonoBehaviour
                     Destroy(newEnemy, 60);
                     TimeToRespawn = 1f * Mathf.Pow(.99f, player_exp.return_level() + wave);
                     enemys_to_spawn_in_wave -= 1;
+                }
+                if(enemy_choosen == 2){
+                    int index = Random.Range(0, enemy_spawning.Length);
+                    float randomNumber_X = enemy_spawning[index].transform.position[0];
+                    
+                    float randomNumber_Z = enemy_spawning[index].transform.position[2];
+
+                    Vector3 enemy_position = new Vector3 (randomNumber_X, 2, randomNumber_Z);
+
+                    GameObject newEnemy = Instantiate(enemyPrefab2, enemy_position, Quaternion.identity);
+                    newEnemy.GetComponent<Alien2Movement>().is_spawned = true;
+                    Destroy(newEnemy, 60);
+                    TimeToRespawn = 1f * Mathf.Pow(.99f, player_exp.return_level() + wave);
+                    enemys_to_spawn_in_wave -= 3;
+                }
+                if(enemy_choosen == 3){
+                    int index = Random.Range(0, enemy_spawning.Length);
+                    float randomNumber_X = enemy_spawning[index].transform.position[0];
+                    
+                    float randomNumber_Z = enemy_spawning[index].transform.position[2];
+
+                    Vector3 enemy_position = new Vector3 (randomNumber_X, 2, randomNumber_Z);
+
+                    GameObject newEnemy = Instantiate(enemyPrefab3, enemy_position, Quaternion.identity);
+                    newEnemy.GetComponent<Alien2Movement>().is_spawned = true;
+                    Destroy(newEnemy, 60);
+                    TimeToRespawn = 1f * Mathf.Pow(.99f, player_exp.return_level() + wave);
+                    enemys_to_spawn_in_wave -= 5;
                 }
             }        
         }
