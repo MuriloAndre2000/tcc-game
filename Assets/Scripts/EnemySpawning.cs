@@ -168,25 +168,11 @@ public class EnemySpawning : MonoBehaviour
 
                     Vector3 enemy_position = new Vector3 (randomNumber_X, 2, randomNumber_Z);
 
-                    GameObject newEnemy = Instantiate(enemyPrefab2, enemy_position, Quaternion.identity);
-                    newEnemy.GetComponent<Alien2Movement>().is_spawned = true;
+                    GameObject newEnemy = Instantiate(enemyPrefab3, enemy_position, Quaternion.identity);
+                    newEnemy.GetComponent<Alien1Movement>().is_spawned = true;
                     Destroy(newEnemy, 60);
                     TimeToRespawn = 1f * Mathf.Pow(.99f, player_exp.return_level() + wave);
                     enemys_to_spawn_in_wave -= 3;
-                }
-                if(enemy_choosen == 3){
-                    int index = Random.Range(0, enemy_spawning.Length);
-                    float randomNumber_X = enemy_spawning[index].transform.position[0];
-                    
-                    float randomNumber_Z = enemy_spawning[index].transform.position[2];
-
-                    Vector3 enemy_position = new Vector3 (randomNumber_X, 2, randomNumber_Z);
-
-                    GameObject newEnemy = Instantiate(enemyPrefab3, enemy_position, Quaternion.identity);
-                    newEnemy.GetComponent<Alien2Movement>().is_spawned = true;
-                    Destroy(newEnemy, 60);
-                    TimeToRespawn = 1f * Mathf.Pow(.99f, player_exp.return_level() + wave);
-                    enemys_to_spawn_in_wave -= 5;
                 }
             }        
         }
