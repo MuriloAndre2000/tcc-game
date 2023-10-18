@@ -8,6 +8,7 @@ TagManager:
   - Street
   - XP
   - Bullet
+  - Enemy Portal
   layers:
   - Default
   - TransparentFX
