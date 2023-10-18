@@ -69,13 +69,17 @@ public class PlayerMovement : MonoBehaviour
             lr.SetPosition(1, end_ray);
 
             Vector3 fromDirection = (start_ray - end_ray).normalized;
+
+            fromDirection = new Vector3 (fromDirection[0], 0f, fromDirection[2]); 
+            // O Vetor de slot 1 estava fazendo o player bugar quando o mouse estava perto dele porque a direção estava bugando
+
             Quaternion targetRotation = Quaternion.LookRotation(fromDirection);
             targetRotation *= Quaternion.Euler(0f, 180f, 0f);
             transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
 
             if(PlayerWeaponChoosing.Weapon_ID == 1){
                 if (Input.GetMouseButton(0) & time_to_shoot_again ==0){
-                    fromDirection = (start_ray - end_ray).normalized;
+                    //fromDirection = (start_ray - end_ray).normalized;
                     Quaternion direction = Quaternion.FromToRotation(Vector3.forward,fromDirection);
                     direction *= Quaternion.Euler(0f, 180f, 0f);
 
@@ -91,7 +95,7 @@ public class PlayerMovement : MonoBehaviour
             }
             if(PlayerWeaponChoosing.Weapon_ID == 2){
                 if (Input.GetMouseButton(0) & time_to_shoot_again ==0){
-                    fromDirection = (start_ray - end_ray).normalized;
+                    //fromDirection = (start_ray - end_ray).normalized;
                     Quaternion direction = Quaternion.FromToRotation(Vector3.forward,fromDirection);
                     direction *= Quaternion.Euler(0f, 180f, 0f);
 
@@ -111,7 +115,7 @@ public class PlayerMovement : MonoBehaviour
                 if (Input.GetMouseButton(0) & time_to_shoot_again ==0){
                     float[] directions = {-20f,-10f,0f,10f,20f};
                         for(int i = 0; i < 5 ;i++){
-                            fromDirection = (start_ray - end_ray).normalized;
+                            //fromDirection = (start_ray - end_ray).normalized;
                             Quaternion direction = Quaternion.FromToRotation(Vector3.forward,fromDirection);
                             direction *= Quaternion.Euler(0f, 180f, 0f);
                             direction *= Quaternion.Euler(0f, directions[i], 0f);
