@@ -15,6 +15,10 @@ public class PlayerMovement : MonoBehaviour
     public GameObject bulletPrefab;
     public GameObject granadePrefab;
 
+    private GameObject Canvas;
+    private GameObject Pause_Menu;
+    private PauseMenu PauseMenu_Object;
+
     public Vector3 worldPosition;
     Plane plane = new Plane(Vector3.up, -1.5f);
 
@@ -30,12 +34,20 @@ public class PlayerMovement : MonoBehaviour
         rb = GetComponent<Rigidbody>();
     }
 
+    void Start(){
+        player = GameObject.FindWithTag("Player");
+        player_exp = player.GetComponent<PlayerEXP>();
+
+        Canvas = Camera.main.gameObject.transform.Find("Canvas").gameObject;
+        Pause_Menu = Camera.main.gameObject.transform.Find("Pause").gameObject;
+        PauseMenu_Object = Pause_Menu.GetComponent<PauseMenu>();
+    }
+
+
     private void Update()
     {
         if (GameObject.FindWithTag("Player") is not null){
-            player = GameObject.FindWithTag("Player");
-            player_exp = player.GetComponent<PlayerEXP>();
-            stop_moving = player_exp.return_pause_all() ;
+            stop_moving = player_exp.return_pause_all() | PauseMenu_Object.IsGamePaused();
             movementSpeed = (float) (1 + .1f*player_exp.return_power_up_speed_increase())*initialMovementSpeed;
         }
 

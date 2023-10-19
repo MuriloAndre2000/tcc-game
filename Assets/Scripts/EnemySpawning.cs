@@ -25,8 +25,10 @@ public class EnemySpawning : MonoBehaviour
     public int wave = 0;
     public int enemys_to_spawn_in_wave = 0;
 
-    private Camera camera_1;
     private GameObject Canvas;
+    private GameObject Pause_Menu;
+    private PauseMenu PauseMenu_Object;
+    private GameObject Wave;
 
     private GameObject[] enemy_spawning;
 
@@ -44,24 +46,28 @@ public class EnemySpawning : MonoBehaviour
 
     private void Start()
     {
-        camera_1 =  Camera.main;
-        Canvas = camera_1.gameObject.transform.Find("Canvas").gameObject;
+        Canvas = Camera.main.gameObject.transform.Find("Canvas").gameObject;
+
+        Pause_Menu = Camera.main.gameObject.transform.Find("Pause").gameObject;
+        PauseMenu_Object = Pause_Menu.GetComponent<PauseMenu>();
+        
         enemy_spawning = GameObject.FindGameObjectsWithTag("Enemy Portal");
-        Debug.Log(enemy_spawning);
+
+        player = GameObject.FindWithTag("Player");
+        player_exp = player.GetComponent<PlayerEXP>();
+
+        Wave = Canvas.transform.Find("Wave").gameObject;
     }
 
     // Update is called once per frame
     void Update()
     {
         if (GameObject.FindWithTag("Player") is not null){
-            player = GameObject.FindWithTag("Player");
-            player_exp = player.GetComponent<PlayerEXP>();
-            stop_spawning = player_exp.return_pause_all();
-            max_enemies = 30 + (int) Mathf.Pow(2, player_exp.return_level());
-            //Debug.Log(GameObject.FindGameObjectsWithTag("Enemy").Length);
 
-            Canvas = camera_1.gameObject.transform.Find("Canvas").gameObject;
-            GameObject Wave = Canvas.transform.Find("Wave").gameObject;
+            stop_spawning = player_exp.return_pause_all() | PauseMenu_Object.IsGamePaused();
+            
+            max_enemies = 30 + (int) Mathf.Pow(2, player_exp.return_level());
+
             TMPro.TextMeshProUGUI wave_text = Wave.GetComponent<TMPro.TextMeshProUGUI>();
             wave_text.text = "Wave " + wave;
         }
