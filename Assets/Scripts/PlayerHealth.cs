@@ -9,6 +9,7 @@ public class PlayerHealth : MonoBehaviour
     private GameObject playerCanvas;
     private GameObject green;
     private RectTransform healthBar;
+    private EnemySpawning enemySpawning;
 
     private void Start()
     {
@@ -17,6 +18,9 @@ public class PlayerHealth : MonoBehaviour
         green = playerCanvas.transform.Find("Green").gameObject;
         healthBar = green.GetComponent<RectTransform>();
         healthBar.sizeDelta = new Vector2(healthBar.sizeDelta.x,3*currentHealth/maxHealth);
+
+        enemySpawning = Camera.main.gameObject.GetComponent<EnemySpawning>();
+        //Debug.Log(enemySpawning.wave);
     }
 
     public void TakeDamage(int damageAmount)
@@ -53,6 +57,11 @@ public class PlayerHealth : MonoBehaviour
         request.SetRequestHeader("Content-Type", "application/json");
 
         request.SendWebRequest();
+
+        float current_points = PlayerPrefs.GetFloat("ResearchPoints");
+        current_points += enemySpawning.wave;
+        PlayerPrefs.SetFloat("ResearchPoints", current_points);
+
 
         int i = 0;
         while(request.result == UnityWebRequest.Result.InProgress){

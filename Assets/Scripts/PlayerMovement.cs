@@ -98,11 +98,11 @@ public class PlayerMovement : MonoBehaviour
                     Vector3 bullet_position = rb.position + fromDirection*-1;
 
                     GameObject newBullet = Instantiate(bulletPrefab, bullet_position, direction);
-                    newBullet.GetComponent<BulletMovement>().damage = (int) (1 + .1f*player_exp.return_power_up_bullet_damage()) *30;
+                    newBullet.GetComponent<BulletMovement>().damage = (int) (1 + .5f*player_exp.return_power_up_bullet_damage()) *30;
                     int bullet_size_increase = player_exp.return_power_up_bullet_size();
                     newBullet.gameObject.transform.localScale += new Vector3(bullet_size_increase/10,bullet_size_increase/10,bullet_size_increase/10);
                     Destroy(newBullet, 5);
-                    time_to_shoot_again = (float) .5f * Mathf.Pow(.99f, player_exp.return_power_up_fire_rate_increase());
+                    time_to_shoot_again = (float) .5f * Mathf.Pow(.9f, player_exp.return_power_up_fire_rate_increase());
                 }
             }
             if(PlayerWeaponChoosing.Weapon_ID == 2){
@@ -114,13 +114,13 @@ public class PlayerMovement : MonoBehaviour
                     Vector3 bullet_position = rb.position + fromDirection*-1;
 
                     GameObject newBullet = Instantiate(bulletPrefab, bullet_position, direction);
-                    newBullet.GetComponent<BulletMovement>().damage = (int) (1 + .1f*player_exp.return_power_up_bullet_damage()) * 25;
+                    newBullet.GetComponent<BulletMovement>().damage = (int) (1 + .5f*player_exp.return_power_up_bullet_damage()) * 25;
 
                     int bullet_size_increase = player_exp.return_power_up_bullet_size();
                     newBullet.gameObject.transform.localScale += new Vector3(bullet_size_increase/10,bullet_size_increase/10,bullet_size_increase/10);
                     
                     Destroy(newBullet, 5);
-                    time_to_shoot_again = (float) .25f * Mathf.Pow(.99f, player_exp.return_power_up_fire_rate_increase());;
+                    time_to_shoot_again = (float) .25f * Mathf.Pow(.9f, player_exp.return_power_up_fire_rate_increase());;
                 }
             }
             if(PlayerWeaponChoosing.Weapon_ID == 3){
@@ -135,14 +135,14 @@ public class PlayerMovement : MonoBehaviour
                             Vector3 bullet_position = rb.position + fromDirection*-1;
 
                             GameObject newBullet = Instantiate(bulletPrefab, bullet_position, direction);
-                            newBullet.GetComponent<BulletMovement>().damage = (int) (1 + .1f*player_exp.return_power_up_bullet_damage()) * 20;
+                            newBullet.GetComponent<BulletMovement>().damage = (int) (1 + .5f*player_exp.return_power_up_bullet_damage()) * 20;
                             
                             int bullet_size_increase = player_exp.return_power_up_bullet_size();
                             newBullet.gameObject.transform.localScale += new Vector3(bullet_size_increase/10,bullet_size_increase/10,bullet_size_increase/10);
                     
                             Destroy(newBullet, 5);
                     }
-                    time_to_shoot_again = (float) 1.5f * Mathf.Pow(.99f, player_exp.return_power_up_fire_rate_increase());;
+                    time_to_shoot_again = (float) 1.5f * Mathf.Pow(.9f, player_exp.return_power_up_fire_rate_increase());;
                 }
             }
 
@@ -155,13 +155,13 @@ public class PlayerMovement : MonoBehaviour
                     Vector3 bullet_position = rb.position + fromDirection*-1;
 
                     GameObject newGranade = Instantiate(granadePrefab, bullet_position, direction);
-                    //newGranade.GetComponent<BulletMovement>().damage = (int) (1 + .1f*player_exp.return_power_up_bullet_damage()) * 25;
+                    //newGranade.GetComponent<BulletMovement>().damage = (int) (1 + .5f*player_exp.return_power_up_bullet_damage()) * 25;
 
                     int granade_size_increase = player_exp.return_power_up_bullet_size();
                     newGranade.gameObject.transform.localScale += new Vector3(granade_size_increase/10,granade_size_increase/10,granade_size_increase/10);
                     
                     Destroy(newGranade, 5);
-                    time_to_shoot_again = (float) 2f * Mathf.Pow(.99f, player_exp.return_power_up_fire_rate_increase());;
+                    time_to_shoot_again = (float) 2f * Mathf.Pow(.9f, player_exp.return_power_up_fire_rate_increase());;
                 }
             }
 

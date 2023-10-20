@@ -50,7 +50,7 @@ public class FieldOfView : MonoBehaviour {
         if (GameObject.FindWithTag("Player") is not null){
             player = GameObject.FindWithTag("Player");
             player_exp = player.GetComponent<PlayerEXP>();
-            viewRadius = initialviewRadius + player_exp.return_power_up_field_radius()/2;
+            viewRadius = initialviewRadius + ((float) player_exp.return_power_up_field_radius())/2;
         }
 
         //DrawFieldOfView ();

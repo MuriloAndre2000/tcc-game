@@ -34,6 +34,11 @@ public class PlayerEXP : MonoBehaviour
         XP_Blue = XP_Canvas.gameObject.transform.Find("XP_Blue").gameObject;
         XP_Bar = XP_Blue.GetComponent<RectTransform>();
         XP_Bar.sizeDelta = new Vector2(350*player_exp,4);
+
+        power_up_bullet_damage = (int) PlayerPrefs.GetFloat("DamageUpgrade");
+        power_up_field_radius = (int) PlayerPrefs.GetFloat("RadiusUpgrade");
+        power_up_fire_rate_increase = (int) PlayerPrefs.GetFloat("FireRateUpgrade");
+
     }
 
     // Update is called once per frame
@@ -82,10 +87,10 @@ public class PlayerEXP : MonoBehaviour
             if(Camera.main.ScreenPointToRay(Input.mousePosition).direction[0] < 0){
                 Debug.Log("Escolheu a opção 1");
                 if(option_1_text == "power_up_bullet_damage"){
-                    power_up_bullet_damage += 3;
+                    power_up_bullet_damage += 1;
                 }
                 if(option_1_text == "power_up_bullet_size"){
-                    power_up_bullet_size += 3;
+                    power_up_bullet_size += 1;
                 }
                 if(option_1_text == "power_up_health_increase"){
                     power_up_health_increase++;
@@ -95,18 +100,18 @@ public class PlayerEXP : MonoBehaviour
                         if (playerHealth != null)
                         {
                             // Apply damage to the enemy
-                            playerHealth.AddHealth(5);
+                            playerHealth.AddHealth(15);
                         }
                     }
                 }
                 if(option_1_text == "power_up_fire_rate_increase"){
-                    power_up_fire_rate_increase += 3;
+                    power_up_fire_rate_increase += 1;
                 }
                 if(option_1_text == "power_up_speed_increase"){
-                    power_up_speed_increase += 3;
+                    power_up_speed_increase += 1;
                 }
                 if(option_1_text == "power_up_field_radius"){
-                    power_up_field_radius += 3;
+                    power_up_field_radius += 1;
                 }
                 pause_all = false;
             }
