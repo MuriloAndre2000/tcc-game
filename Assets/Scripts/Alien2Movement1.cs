@@ -41,7 +41,7 @@ public class Alien2Movement : MonoBehaviour
                 enemy_spawning.enemys_to_spawn_in_wave += 1;
             }
 
-            if (player_exp.return_pause_all() | PauseMenu_Object.IsGamePaused() == false) {
+            if ((player_exp.return_pause_all() | PauseMenu_Object.IsGamePaused()) == false) {
                 player_transform = GameObject.FindWithTag("Player").transform;
                 Vector3 directionToPlayer = player_transform.position - transform.position;
                 distance = Vector3.Distance (player_transform.position, transform.position);
