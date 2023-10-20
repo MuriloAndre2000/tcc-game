@@ -14,15 +14,19 @@ public class PlayerMovement : MonoBehaviour
 
     public GameObject bulletPrefab;
     public GameObject granadePrefab;
+    public GameObject SelectWeapon;
+
 
     private GameObject Canvas;
     private GameObject Pause_Menu;
     private PauseMenu PauseMenu_Object;
+    private SelectWeaponLoading SelectWeaponLoadingObj;
 
     public Vector3 worldPosition;
     Plane plane = new Plane(Vector3.up, -1.5f);
 
     public float time_to_shoot_again = 0f;
+    public float initial_time_to_shoot_again = 0f;
 
     private bool stop_moving = false;
     private GameObject player;   
@@ -41,6 +45,8 @@ public class PlayerMovement : MonoBehaviour
         Canvas = Camera.main.gameObject.transform.Find("Canvas").gameObject;
         Pause_Menu = Camera.main.gameObject.transform.Find("Pause").gameObject;
         PauseMenu_Object = Pause_Menu.GetComponent<PauseMenu>();
+
+        SelectWeaponLoadingObj = SelectWeapon.GetComponent<SelectWeaponLoading>();
     }
 
 
@@ -52,6 +58,13 @@ public class PlayerMovement : MonoBehaviour
         }
 
         if (stop_moving == false){
+
+            if(initial_time_to_shoot_again != 0){
+                SelectWeaponLoadingObj.ChangeFillScrollbar(time_to_shoot_again/initial_time_to_shoot_again);
+            }
+            else{
+                SelectWeaponLoadingObj.ChangeFillScrollbar(0f);
+            }
 
             //Move
             float horizontalInput = Input.GetAxis("Horizontal");
@@ -103,6 +116,7 @@ public class PlayerMovement : MonoBehaviour
                     newBullet.gameObject.transform.localScale += new Vector3(bullet_size_increase/10,bullet_size_increase/10,bullet_size_increase/10);
                     Destroy(newBullet, 5);
                     time_to_shoot_again = (float) .5f * Mathf.Pow(.9f, player_exp.return_power_up_fire_rate_increase());
+                    initial_time_to_shoot_again = time_to_shoot_again;
                 }
             }
             if(PlayerWeaponChoosing.Weapon_ID == 2){
@@ -121,6 +135,7 @@ public class PlayerMovement : MonoBehaviour
                     
                     Destroy(newBullet, 5);
                     time_to_shoot_again = (float) .25f * Mathf.Pow(.9f, player_exp.return_power_up_fire_rate_increase());;
+                    initial_time_to_shoot_again = time_to_shoot_again;
                 }
             }
             if(PlayerWeaponChoosing.Weapon_ID == 3){
@@ -143,6 +158,7 @@ public class PlayerMovement : MonoBehaviour
                             Destroy(newBullet, 5);
                     }
                     time_to_shoot_again = (float) 1.5f * Mathf.Pow(.9f, player_exp.return_power_up_fire_rate_increase());;
+                    initial_time_to_shoot_again = time_to_shoot_again;
                 }
             }
 
@@ -162,11 +178,13 @@ public class PlayerMovement : MonoBehaviour
                     
                     Destroy(newGranade, 5);
                     time_to_shoot_again = (float) 2f * Mathf.Pow(.9f, player_exp.return_power_up_fire_rate_increase());;
+                    initial_time_to_shoot_again = time_to_shoot_again;
                 }
             }
 
             if (time_to_shoot_again < 0){
                 time_to_shoot_again = 0f;
+                initial_time_to_shoot_again = 0f;
             }
             if (time_to_shoot_again > 0){
                 time_to_shoot_again -= Time.deltaTime;
