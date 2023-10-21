@@ -16,6 +16,10 @@ public class PlayerMovement : MonoBehaviour
     public GameObject granadePrefab;
     public GameObject SelectWeapon;
 
+    public AudioClip pistolShootingSound;
+    public AudioClip machineGunShootingSound;
+    public AudioClip shotgunShootingSound;
+    private AudioSource m_AudioSource; //The thing to play the audio
 
     private GameObject Canvas;
     private GameObject Pause_Menu;
@@ -47,6 +51,8 @@ public class PlayerMovement : MonoBehaviour
         PauseMenu_Object = Pause_Menu.GetComponent<PauseMenu>();
 
         SelectWeaponLoadingObj = SelectWeapon.GetComponent<SelectWeaponLoading>();
+
+        m_AudioSource = GetComponent<AudioSource>();
     }
 
 
@@ -60,7 +66,7 @@ public class PlayerMovement : MonoBehaviour
         if (stop_moving == false){
 
             if(initial_time_to_shoot_again != 0){
-                SelectWeaponLoadingObj.ChangeFillScrollbar(time_to_shoot_again/initial_time_to_shoot_again);
+                SelectWeaponLoadingObj.ChangeFillScrollbar(1- (time_to_shoot_again/initial_time_to_shoot_again));
             }
             else{
                 SelectWeaponLoadingObj.ChangeFillScrollbar(0f);
@@ -110,6 +116,9 @@ public class PlayerMovement : MonoBehaviour
 
                     Vector3 bullet_position = rb.position + fromDirection*-1;
 
+                    m_AudioSource.clip = pistolShootingSound;
+                    m_AudioSource.PlayOneShot(m_AudioSource.clip);
+
                     GameObject newBullet = Instantiate(bulletPrefab, bullet_position, direction);
                     newBullet.GetComponent<BulletMovement>().damage = (int) (1 + .5f*player_exp.return_power_up_bullet_damage()) *30;
                     int bullet_size_increase = player_exp.return_power_up_bullet_size();
@@ -125,7 +134,13 @@ public class PlayerMovement : MonoBehaviour
                     Quaternion direction = Quaternion.FromToRotation(Vector3.forward,fromDirection);
                     direction *= Quaternion.Euler(0f, 180f, 0f);
 
+                    float noiseStrife = Random.Range(0, 10);
+                    direction *= Quaternion.Euler(0f, noiseStrife-5, 0f);
+
                     Vector3 bullet_position = rb.position + fromDirection*-1;
+
+                    m_AudioSource.clip = machineGunShootingSound;
+                    m_AudioSource.PlayOneShot(m_AudioSource.clip);
 
                     GameObject newBullet = Instantiate(bulletPrefab, bullet_position, direction);
                     newBullet.GetComponent<BulletMovement>().damage = (int) (1 + .5f*player_exp.return_power_up_bullet_damage()) * 25;
@@ -157,6 +172,8 @@ public class PlayerMovement : MonoBehaviour
                     
                             Destroy(newBullet, 5);
                     }
+                    m_AudioSource.clip = shotgunShootingSound;
+                    m_AudioSource.PlayOneShot(m_AudioSource.clip);
                     time_to_shoot_again = (float) 1.5f * Mathf.Pow(.9f, player_exp.return_power_up_fire_rate_increase());;
                     initial_time_to_shoot_again = time_to_shoot_again;
                 }
