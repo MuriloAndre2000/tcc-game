@@ -10,6 +10,7 @@ public class EnemyHealth : MonoBehaviour
 
     public GameObject XPprefab;
 
+    public GameObject prefabDamageText;
 
     private void Start()
     {
@@ -24,7 +25,13 @@ public class EnemyHealth : MonoBehaviour
     {
         currentHealth -= damageAmount;
         //healthBar.sizeDelta = new Vector2(healthBar.sizeDelta.x,3*currentHealth/maxHealth);
+        Quaternion direction = Quaternion.Euler(90, 0, 0);
+        Vector3 offset = new Vector3(0f,2f,0f);
+        GameObject newDamage = Instantiate(prefabDamageText, transform.position+offset, direction);
+        TMPro.TextMeshPro newDamage_text = newDamage.GetComponent<TMPro.TextMeshPro>();
 
+        newDamage_text.text = damageAmount + "";
+        Destroy(newDamage, 1);
         // Check if the enemy is dead
         if (currentHealth <= 0)
         {
