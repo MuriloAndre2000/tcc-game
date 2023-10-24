@@ -89,12 +89,20 @@ public class PlayerMovement : MonoBehaviour
         }
         Vector3 start_ray = rb.position;
         Vector3 end_ray = worldPosition;
+        Vector3[] points = {start_ray, end_ray, end_ray};
+        
+        if (PlayerWeaponChoosing.Weapon_ID == 4){
+            Vector3 middle_ray = new Vector3((end_ray[0] + start_ray[0])/2,
+                                             (end_ray[1] + start_ray[1])/2,
+                                             (end_ray[2] + start_ray[2])/2);
+            middle_ray += new Vector3(0f, 5f, 0f);
+            points = new Vector3[] {start_ray, middle_ray, end_ray};
+        }
 
         lr = GetComponent<LineRenderer>();
         lr.startWidth = 0.1f;
         lr.endWidth = 0.1f;
-        lr.SetPosition(0, start_ray);
-        lr.SetPosition(1, end_ray);
+        lr.SetPositions(points);
 
         Vector3 fromDirection = (start_ray - end_ray).normalized;
 
@@ -123,7 +131,6 @@ public class PlayerMovement : MonoBehaviour
         int fire_rate_increase = player_exp.return_power_up_fire_rate_increase();
 
         time_to_shoot_again = (float) time_to_shoot_again_base * Mathf.Pow(.9f, fire_rate_increase);
-        Debug.Log(Mathf.Pow(.9f, fire_rate_increase));
         initial_time_to_shoot_again = time_to_shoot_again;
     }
 
@@ -176,7 +183,12 @@ public class PlayerMovement : MonoBehaviour
 
             if(PlayerWeaponChoosing.Weapon_ID == 4){
                 if (Input.GetMouseButton(0) & time_to_shoot_again ==0){
-                    Debug.Log("Granada");
+                    Quaternion direction = transform.rotation;
+                    GameObject newGrenade = Instantiate(granadePrefab, rb.position, direction);
+                    Destroy(newGrenade, 5);
+                    int fire_rate_increase = player_exp.return_power_up_fire_rate_increase();
+                    time_to_shoot_again = (float) 1f * Mathf.Pow(.9f, fire_rate_increase);
+                    initial_time_to_shoot_again = time_to_shoot_again;
                 }
             }
 
