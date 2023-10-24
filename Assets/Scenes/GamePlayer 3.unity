@@ -51654,7 +51654,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   explosionForce: 100
-  explosionRadius: 2
+  explosionRadius: 4
   fuseTime: 3
   explosionEffect: {fileID: 7078263394273877843, guid: b3d3afdd832e7874c8ac057a8861d8cb, type: 3}
 --- !u!135 &1095854492

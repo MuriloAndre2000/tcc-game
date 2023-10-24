@@ -55,6 +55,79 @@ public class PlayerMovement : MonoBehaviour
         m_AudioSource = GetComponent<AudioSource>();
     }
 
+    private void playShootingSound(AudioClip ShootingSound){
+        m_AudioSource.clip = ShootingSound;
+        m_AudioSource.PlayOneShot(m_AudioSource.clip);
+    }
+
+    private void UpdateTimeToShotAgainUI(float time_to_shoot_again, float initial_time_to_shoot_again){
+        if(initial_time_to_shoot_again != 0){
+            SelectWeaponLoadingObj.ChangeFillScrollbar(1- (time_to_shoot_again/initial_time_to_shoot_again));
+        }
+        else{
+            SelectWeaponLoadingObj.ChangeFillScrollbar(0f);
+        }
+    }
+
+    private void Move(){
+        float horizontalInput = Input.GetAxis("Horizontal");
+        float verticalInput = Input.GetAxis("Vertical");
+        Vector3 movementDirection = new Vector3(horizontalInput, 0f, verticalInput);
+            
+        if (movementDirection.sqrMagnitude > 1f){
+            movementDirection.Normalize();
+        }
+
+        rb.MovePosition(rb.position + movementDirection * movementSpeed * Time.deltaTime);
+    }
+
+    private void Aim(){
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        float distance;
+        if (plane.Raycast(ray, out distance)){
+            worldPosition = ray.GetPoint(distance);
+        }
+        Vector3 start_ray = rb.position;
+        Vector3 end_ray = worldPosition;
+
+        lr = GetComponent<LineRenderer>();
+        lr.startWidth = 0.1f;
+        lr.endWidth = 0.1f;
+        lr.SetPosition(0, start_ray);
+        lr.SetPosition(1, end_ray);
+
+        Vector3 fromDirection = (start_ray - end_ray).normalized;
+
+        fromDirection = new Vector3 (fromDirection[0], 0f, fromDirection[2]); 
+        // O Vetor de slot 1 estava fazendo o player bugar quando o mouse estava perto dele porque a direção estava bugando
+
+        Quaternion targetRotation = Quaternion.LookRotation(fromDirection);
+        targetRotation *= Quaternion.Euler(0f, 180f, 0f);
+        transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
+    }
+
+    private void CreateBullet(Vector3 position, Quaternion direction, int base_damage, float time_to_shoot_again_base){
+        GameObject newBullet = Instantiate(bulletPrefab, position, direction);
+        int bullet_damage = player_exp.return_power_up_bullet_damage();
+        float damage = (float) (1 + .5f * bullet_damage) * base_damage;
+        newBullet.GetComponent<BulletMovement>().damage = (int) damage;
+
+        int bullet_size_increase = player_exp.return_power_up_bullet_size();
+        float bullet_size_multiplier = (float) bullet_size_increase/10;
+        newBullet.gameObject.transform.localScale += new Vector3(bullet_size_multiplier,
+                                                                 bullet_size_multiplier,
+                                                                 bullet_size_multiplier);
+
+        Destroy(newBullet, 5);
+
+        int fire_rate_increase = player_exp.return_power_up_fire_rate_increase();
+
+        time_to_shoot_again = (float) time_to_shoot_again_base * Mathf.Pow(.9f, fire_rate_increase);
+        Debug.Log(Mathf.Pow(.9f, fire_rate_increase));
+        initial_time_to_shoot_again = time_to_shoot_again;
+    }
+
+
 
     private void Update()
     {
@@ -65,142 +138,45 @@ public class PlayerMovement : MonoBehaviour
 
         if (stop_moving == false){
 
-            if(initial_time_to_shoot_again != 0){
-                SelectWeaponLoadingObj.ChangeFillScrollbar(1- (time_to_shoot_again/initial_time_to_shoot_again));
-            }
-            else{
-                SelectWeaponLoadingObj.ChangeFillScrollbar(0f);
-            }
+            UpdateTimeToShotAgainUI(time_to_shoot_again, initial_time_to_shoot_again);
 
-            //Move
-            float horizontalInput = Input.GetAxis("Horizontal");
-            float verticalInput = Input.GetAxis("Vertical");
-            Vector3 movementDirection = new Vector3(horizontalInput, 0f, verticalInput);
-            
-            if (movementDirection.sqrMagnitude > 1f){
-                movementDirection.Normalize();
-            }
+            Move();
 
-            rb.MovePosition(rb.position + movementDirection * movementSpeed * Time.deltaTime);
-
-            //if (movementDirection != Vector3.zero)
-            //{
-            //    Quaternion targetRotation = Quaternion.LookRotation(movementDirection);
-            //    transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
-            //}
-
-            //Trying to understand mouse in In unity
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            float distance;
-            if (plane.Raycast(ray, out distance)){
-                worldPosition = ray.GetPoint(distance);
-            }
-            Vector3 start_ray = rb.position;
-            Vector3 end_ray = worldPosition;
-
-            lr = GetComponent<LineRenderer>();
-            lr.startWidth = 0.1f;
-            lr.endWidth = 0.1f;
-            lr.SetPosition(0, start_ray);
-            lr.SetPosition(1, end_ray);
-
-            Vector3 fromDirection = (start_ray - end_ray).normalized;
-
-            fromDirection = new Vector3 (fromDirection[0], 0f, fromDirection[2]); 
-            // O Vetor de slot 1 estava fazendo o player bugar quando o mouse estava perto dele porque a direção estava bugando
-
-            Quaternion targetRotation = Quaternion.LookRotation(fromDirection);
-            targetRotation *= Quaternion.Euler(0f, 180f, 0f);
-            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
+            Aim();
 
             if(PlayerWeaponChoosing.Weapon_ID == 1){
                 if (Input.GetMouseButton(0) & time_to_shoot_again ==0){
-                    //fromDirection = (start_ray - end_ray).normalized;
-                    Quaternion direction = Quaternion.FromToRotation(Vector3.forward,fromDirection);
-                    direction *= Quaternion.Euler(0f, 180f, 0f);
-
-                    Vector3 bullet_position = rb.position + fromDirection*-1;
-
-                    m_AudioSource.clip = pistolShootingSound;
-                    m_AudioSource.PlayOneShot(m_AudioSource.clip);
-
-                    GameObject newBullet = Instantiate(bulletPrefab, bullet_position, direction);
-                    newBullet.GetComponent<BulletMovement>().damage = (int) (1 + .5f*player_exp.return_power_up_bullet_damage()) *30;
-                    int bullet_size_increase = player_exp.return_power_up_bullet_size();
-                    newBullet.gameObject.transform.localScale += new Vector3(bullet_size_increase/10,bullet_size_increase/10,bullet_size_increase/10);
-                    Destroy(newBullet, 5);
-                    time_to_shoot_again = (float) .5f * Mathf.Pow(.9f, player_exp.return_power_up_fire_rate_increase());
-                    initial_time_to_shoot_again = time_to_shoot_again;
+                    playShootingSound(pistolShootingSound);
+                    CreateBullet(rb.position, transform.rotation, 30, .5f);
                 }
             }
             if(PlayerWeaponChoosing.Weapon_ID == 2){
                 if (Input.GetMouseButton(0) & time_to_shoot_again ==0){
-                    //fromDirection = (start_ray - end_ray).normalized;
-                    Quaternion direction = Quaternion.FromToRotation(Vector3.forward,fromDirection);
-                    direction *= Quaternion.Euler(0f, 180f, 0f);
-
+                    Quaternion direction = transform.rotation;
                     float noiseStrife = Random.Range(0, 10);
                     direction *= Quaternion.Euler(0f, noiseStrife-5, 0f);
 
-                    Vector3 bullet_position = rb.position + fromDirection*-1;
-
-                    m_AudioSource.clip = machineGunShootingSound;
-                    m_AudioSource.PlayOneShot(m_AudioSource.clip);
-
-                    GameObject newBullet = Instantiate(bulletPrefab, bullet_position, direction);
-                    newBullet.GetComponent<BulletMovement>().damage = (int) (1 + .5f*player_exp.return_power_up_bullet_damage()) * 25;
-
-                    int bullet_size_increase = player_exp.return_power_up_bullet_size();
-                    newBullet.gameObject.transform.localScale += new Vector3(bullet_size_increase/10,bullet_size_increase/10,bullet_size_increase/10);
-                    
-                    Destroy(newBullet, 5);
-                    time_to_shoot_again = (float) .25f * Mathf.Pow(.9f, player_exp.return_power_up_fire_rate_increase());;
-                    initial_time_to_shoot_again = time_to_shoot_again;
+                    playShootingSound(machineGunShootingSound);
+                    CreateBullet(rb.position, direction, 25, .25f);
                 }
             }
             if(PlayerWeaponChoosing.Weapon_ID == 3){
                 if (Input.GetMouseButton(0) & time_to_shoot_again ==0){
                     float[] directions = {-20f,-10f,0f,10f,20f};
-                        for(int i = 0; i < 5 ;i++){
-                            //fromDirection = (start_ray - end_ray).normalized;
-                            Quaternion direction = Quaternion.FromToRotation(Vector3.forward,fromDirection);
-                            direction *= Quaternion.Euler(0f, 180f, 0f);
-                            direction *= Quaternion.Euler(0f, directions[i], 0f);
 
-                            Vector3 bullet_position = rb.position + fromDirection*-1;
+                    playShootingSound(shotgunShootingSound);
 
-                            GameObject newBullet = Instantiate(bulletPrefab, bullet_position, direction);
-                            newBullet.GetComponent<BulletMovement>().damage = (int) (1 + .5f*player_exp.return_power_up_bullet_damage()) * 20;
-                            
-                            int bullet_size_increase = player_exp.return_power_up_bullet_size();
-                            newBullet.gameObject.transform.localScale += new Vector3(bullet_size_increase/10,bullet_size_increase/10,bullet_size_increase/10);
-                    
-                            Destroy(newBullet, 5);
+                    for(int i = 0; i < 5 ;i++){
+                        Quaternion direction = transform.rotation;
+                        direction *= Quaternion.Euler(0f, directions[i], 0f);
+                        CreateBullet(rb.position, direction, 20, 1.5f);
                     }
-                    m_AudioSource.clip = shotgunShootingSound;
-                    m_AudioSource.PlayOneShot(m_AudioSource.clip);
-                    time_to_shoot_again = (float) 1.5f * Mathf.Pow(.9f, player_exp.return_power_up_fire_rate_increase());;
-                    initial_time_to_shoot_again = time_to_shoot_again;
                 }
             }
 
             if(PlayerWeaponChoosing.Weapon_ID == 4){
                 if (Input.GetMouseButton(0) & time_to_shoot_again ==0){
-                    fromDirection = (start_ray - end_ray).normalized;
-                    Quaternion direction = Quaternion.FromToRotation(Vector3.forward,fromDirection);
-                    direction *= Quaternion.Euler(0f, 180f, 0f);
-
-                    Vector3 bullet_position = rb.position + fromDirection*-1;
-
-                    GameObject newGranade = Instantiate(granadePrefab, bullet_position, direction);
-                    //newGranade.GetComponent<BulletMovement>().damage = (int) (1 + .5f*player_exp.return_power_up_bullet_damage()) * 25;
-
-                    int granade_size_increase = player_exp.return_power_up_bullet_size();
-                    newGranade.gameObject.transform.localScale += new Vector3(granade_size_increase/10,granade_size_increase/10,granade_size_increase/10);
-                    
-                    Destroy(newGranade, 5);
-                    time_to_shoot_again = (float) 2f * Mathf.Pow(.9f, player_exp.return_power_up_fire_rate_increase());;
-                    initial_time_to_shoot_again = time_to_shoot_again;
+                    Debug.Log("Granada");
                 }
             }
 
