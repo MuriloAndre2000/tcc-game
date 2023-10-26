@@ -36,6 +36,10 @@ public class PlayerWeaponChoosing : MonoBehaviour
              Weapon_ID = 4;
              Change_Camera();
         }
+        if(Input.GetKeyDown("5")){
+             Weapon_ID = 5;
+             Change_Camera();
+        }
     }
 
     void Change_Camera(){
@@ -55,6 +59,9 @@ public class PlayerWeaponChoosing : MonoBehaviour
         }
         if (Weapon_ID == 4){
             posX = 280;
+        }
+        if (Weapon_ID == 5){
+            posX = 420;
         }
         Select_Weapon_Transform.anchoredPosition  = new Vector2(posX,-200);// trocar por Posição Relativa
     }

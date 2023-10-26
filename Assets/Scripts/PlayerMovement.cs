@@ -114,11 +114,11 @@ public class PlayerMovement : MonoBehaviour
         transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
     }
 
-    private void CreateBullet(Vector3 position, Quaternion direction, int base_damage, float time_to_shoot_again_base){
+    private GameObject CreateBullet(Vector3 position, Quaternion direction, int base_damage, float time_to_shoot_again_base){
         GameObject newBullet = Instantiate(bulletPrefab, position, direction);
         int bullet_damage = player_exp.return_power_up_bullet_damage();
         float damage = (float) (1 + .5f * bullet_damage) * base_damage;
-        newBullet.GetComponent<BulletMovement>().damage = (int) damage;
+        newBullet.GetComponent<BulletBehavior>().damage = (int) damage;
 
         int bullet_size_increase = player_exp.return_power_up_bullet_size();
         float bullet_size_multiplier = (float) bullet_size_increase/10;
@@ -132,6 +132,7 @@ public class PlayerMovement : MonoBehaviour
 
         time_to_shoot_again = (float) time_to_shoot_again_base * Mathf.Pow(.9f, fire_rate_increase);
         initial_time_to_shoot_again = time_to_shoot_again;
+        return newBullet;
     }
 
 
@@ -184,11 +185,25 @@ public class PlayerMovement : MonoBehaviour
             if(PlayerWeaponChoosing.Weapon_ID == 4){
                 if (Input.GetMouseButton(0) & time_to_shoot_again ==0){
                     Quaternion direction = transform.rotation;
-                    GameObject newGrenade = Instantiate(granadePrefab, rb.position, direction);
-                    Destroy(newGrenade, 5);
-                    int fire_rate_increase = player_exp.return_power_up_fire_rate_increase();
-                    time_to_shoot_again = (float) 1f * Mathf.Pow(.9f, fire_rate_increase);
-                    initial_time_to_shoot_again = time_to_shoot_again;
+                    direction *= Quaternion.Euler(-45f, 0f, 0f);
+                    GameObject newGrenade = CreateBullet(rb.position, direction, 0, 1f);
+                    BulletBehavior grenade = newGrenade.GetComponent<BulletBehavior>();
+                    grenade.explosionForce = 100f;
+                    grenade.explosionRadius = 5f;
+                    grenade.fuseTime = .5f;
+                    grenade.is_grenade = true;
+                    grenade.movementSpeed = 5f;
+                }
+            }
+            if(PlayerWeaponChoosing.Weapon_ID == 5){
+                if (Input.GetMouseButton(0) & time_to_shoot_again ==0){
+                    Quaternion direction = transform.rotation;
+                    GameObject newGrenade = CreateBullet(rb.position, direction, 0, 1f);
+                    BulletBehavior grenade = newGrenade.GetComponent<BulletBehavior>();
+                    grenade.explosionForce = 100f;
+                    grenade.explosionRadius = 5f;
+                    grenade.is_explosive = true;
+                    grenade.movementSpeed = 15f;
                 }
             }
 
