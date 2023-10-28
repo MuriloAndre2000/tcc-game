@@ -155,7 +155,8 @@ public class PlayerMovement : MonoBehaviour
             if(PlayerWeaponChoosing.Weapon_ID == 1){
                 if (Input.GetMouseButton(0) & time_to_shoot_again ==0){
                     playShootingSound(pistolShootingSound);
-                    CreateBullet(rb.position, transform.rotation, 30, .5f);
+                    Quaternion direction = transform.rotation;
+                    CreateBullet(rb.position, direction, 30, .5f);
                 }
             }
             if(PlayerWeaponChoosing.Weapon_ID == 2){
