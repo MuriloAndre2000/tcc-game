@@ -23,6 +23,12 @@ public class PlayerHealth : MonoBehaviour
         //Debug.Log(enemySpawning.wave);
     }
 
+    private void Update(){
+        if(transform.position[1] <=-10){
+            Die();
+        }
+    }
+
     public void TakeDamage(int damageAmount)
     {
         currentHealth -= damageAmount;

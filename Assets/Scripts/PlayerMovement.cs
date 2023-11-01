@@ -77,6 +77,11 @@ public class PlayerMovement : MonoBehaviour
         if (movementDirection.sqrMagnitude > 1f){
             movementDirection.Normalize();
         }
+        int layerMask = 1 << LayerMask.NameToLayer("Untagged");
+        RaycastHit hit;
+        Physics.Raycast(transform.position, transform.TransformDirection(movementDirection), out hit, Mathf.Infinity, layerMask);
+        //Debug.Log(hit.distance);
+        // Estou tentando de alguma forma evitar que o Player atravesse paredes
 
         rb.MovePosition(rb.position + movementDirection * movementSpeed * Time.deltaTime);
     }
@@ -137,7 +142,7 @@ public class PlayerMovement : MonoBehaviour
 
 
 
-    private void Update()
+    private void FixedUpdate()
     {
         if (GameObject.FindWithTag("Player") is not null){
             stop_moving = player_exp.return_pause_all() | PauseMenu_Object.IsGamePaused();

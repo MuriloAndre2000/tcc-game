@@ -19,9 +19,7 @@ public class PlayerEXP : MonoBehaviour
 
     private Camera camera_1;
     private GameObject Canvas;
-    private GameObject XP_Canvas;
-    private GameObject XP_Blue;
-    private RectTransform XP_Bar;
+    private GameObject XP_points;
 
     private string option_1_text;
     private string option_2_text;
@@ -30,10 +28,13 @@ public class PlayerEXP : MonoBehaviour
     {
         camera_1 =  Camera.main;
         Canvas = camera_1.gameObject.transform.Find("Canvas").gameObject;
-        XP_Canvas = Canvas.gameObject.transform.Find("XP_Canvas").gameObject;
-        XP_Blue = XP_Canvas.gameObject.transform.Find("XP_Blue").gameObject;
-        XP_Bar = XP_Blue.GetComponent<RectTransform>();
-        XP_Bar.sizeDelta = new Vector2(350*player_exp,4);
+        //XP_Canvas = Canvas.gameObject.transform.Find("XP_Canvas").gameObject;
+        //XP_Blue = XP_Canvas.gameObject.transform.Find("XP_Blue").gameObject;
+        //XP_Bar = XP_Blue.GetComponent<RectTransform>();
+        //XP_Bar.sizeDelta = new Vector2(350*player_exp,4);
+        XP_points = Canvas.transform.Find("Points").gameObject;
+
+
 
         power_up_bullet_damage = (int) PlayerPrefs.GetFloat("DamageUpgrade");
         power_up_field_radius = (int) PlayerPrefs.GetFloat("RadiusUpgrade");
@@ -52,7 +53,9 @@ public class PlayerEXP : MonoBehaviour
                 level_step += 3;
             }
         }
-        XP_Bar.sizeDelta = new Vector2(40*player_exp,4);
+        //XP_Bar.sizeDelta = new Vector2(40*player_exp,4);
+        TMPro.TextMeshProUGUI points_text = XP_points.GetComponent<TMPro.TextMeshProUGUI>();
+        points_text.text = "" + player_exp;
 
         render_options();
         check_input();
