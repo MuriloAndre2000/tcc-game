@@ -11,7 +11,6 @@ public class BuyFrontierText : MonoBehaviour
     void Update()
     {
         GameObject[] frontiers = GameObject.FindGameObjectsWithTag("Frontier");
-        Debug.Log(frontiers);
         activate = false;
         foreach(GameObject frontier in frontiers)
         {
@@ -19,6 +18,13 @@ public class BuyFrontierText : MonoBehaviour
            float distance = Vector3.Distance(object_transform.position, transform.position);
            if (distance < 4){
                 activate = true;
+                if(Input.GetKeyDown("e")){
+                    PlayerEXP player_exp = gameObject.GetComponent<PlayerEXP>();
+                    if (player_exp.player_exp >=30){
+                        player_exp.player_exp -= 30;
+                        frontier.SetActive(false);
+                    }
+                }
            }
         } 
         BuyText.SetActive(activate);
