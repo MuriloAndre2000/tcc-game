@@ -8,9 +8,16 @@ public class PauseMenu : MonoBehaviour
 {
     public bool GameIsPaused = false;
     public bool OptionIsOpen = false;
+    public GameObject LootMenu;
+    private LootMenu Loot_Menu;
 
     public GameObject PauseMenuUI;
     public GameObject OptionMenuUI;
+
+
+    public void Start(){
+        Loot_Menu = LootMenu.GetComponent<LootMenu>();
+    }
 
     public bool IsGamePaused(){
         return GameIsPaused;
@@ -46,17 +53,19 @@ public class PauseMenu : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.Escape)){
-            if (GameIsPaused){
-                if(OptionIsOpen){
-                    BackToPauseMenu();
+        if(Loot_Menu.GameIsPaused == false){
+            if(Input.GetKeyDown(KeyCode.Escape)){
+                if (GameIsPaused){
+                    if(OptionIsOpen){
+                        BackToPauseMenu();
+                    }
+                    else{
+                        Resume_Game();
+                    }
                 }
                 else{
-                    Resume_Game();
+                    Pause_Game();
                 }
-            }
-            else{
-                Pause_Game();
             }
         }
         

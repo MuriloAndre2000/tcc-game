@@ -5,17 +5,16 @@ using UnityEngine;
 public class Alien1Movement : MonoBehaviour
 {
     public float movementSpeed = 3f;
-    public Transform player_transform;
+    private Transform player_transform;
     private float distance;
+    private float time_to_attack = .5f;
     private float time_to_attack_again = 0f;
     private float rotationSpeed = 10f;
 
     private GameObject player;
     private PlayerEXP player_exp;
-
-    private GameObject Canvas;
-    private GameObject Pause_Menu;
-    private PauseMenu PauseMenu_Object;
+    public GameObject PauseHandler;
+    private PauseHandler pause_handler;
 
     private UnityEngine.AI.NavMeshAgent agent;
 
@@ -24,10 +23,7 @@ public class Alien1Movement : MonoBehaviour
     void Start(){
         player = GameObject.FindWithTag("Player");
         player_exp = player.GetComponent<PlayerEXP>();
-
-        Canvas = Camera.main.gameObject.transform.Find("Canvas").gameObject;
-        Pause_Menu = Camera.main.gameObject.transform.Find("Pause").gameObject;
-        PauseMenu_Object = Pause_Menu.GetComponent<PauseMenu>();
+        pause_handler = PauseHandler.GetComponent<PauseHandler>();
 
         agent = GetComponent<UnityEngine.AI.NavMeshAgent>();
     }
@@ -50,14 +46,11 @@ public class Alien1Movement : MonoBehaviour
                 enemy_spawning.enemys_to_spawn_in_wave += 1;
             }
 
-            if ((player_exp.return_pause_all() | PauseMenu_Object.IsGamePaused()) == false) {
+            if (pause_handler.GameIsPaused == false) {
                 player_transform = GameObject.FindWithTag("Player").transform;
                 Vector3 directionToPlayer = player_transform.position - transform.position;
 
                 int layerMask = 1 << LayerMask.NameToLayer("Player");
-
-                //Vector3 direction = new Vector3(1f,0f,0f);
-                //reateRayCast(direction, layerMask);
 
                 distance = Vector3.Distance (player_transform.position, transform.position);
 
@@ -76,14 +69,26 @@ public class Alien1Movement : MonoBehaviour
                 else{
                     transform.position = agent.nextPosition;
                 }
+                if (distance < 1.5){
+                    if (time_to_attack < 0){
+                        time_to_attack = 0f;
+                    }
+                    if (time_to_attack > 0){
+                        time_to_attack -= Time.deltaTime;
+                    }
+                }
+                else{
+                    time_to_attack = .5f;
+                }
 
-                if (distance < 1.5 & time_to_attack_again == 0){
+                if (distance < 1.5 & time_to_attack == 0 & time_to_attack_again == 0){
                     PlayerHealth playerHealth = GameObject.FindWithTag("Player").GetComponent<PlayerHealth>();
                     if (playerHealth != null)
                     {
                         // Apply damage to the enemy
                         playerHealth.TakeDamage(5);
-                        time_to_attack_again = 1.5f;
+                        time_to_attack_again = 1.1f;
+                        time_to_attack = .5f;
                     }
                 }
 
@@ -95,6 +100,17 @@ public class Alien1Movement : MonoBehaviour
                 }
             }
             else{
+                player_transform = GameObject.FindWithTag("Player").transform;
+                Vector3 directionToPlayer = player_transform.position - transform.position;
+
+                int layerMask = 1 << LayerMask.NameToLayer("Player");
+
+                distance = Vector3.Distance (player_transform.position, transform.position);
+
+                directionToPlayer.Normalize();
+                if(!CheckIfRayCastHitPlayer(directionToPlayer, layerMask)){ // If Alien is seeing the Player no need to use PathFinding
+                    agent.destination = gameObject.transform.position;
+                }
                 agent.updatePosition = false;
             }
         }

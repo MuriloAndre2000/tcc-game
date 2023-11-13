@@ -12,10 +12,8 @@ public class Alien2Movement : MonoBehaviour
 
     private GameObject player;
     private PlayerEXP player_exp;
-
-    private GameObject Canvas;
-    private GameObject Pause_Menu;
-    private PauseMenu PauseMenu_Object;
+    public GameObject PauseHandler;
+    private PauseHandler pause_handler;
 
     public GameObject projectilePrefab;
 
@@ -24,10 +22,7 @@ public class Alien2Movement : MonoBehaviour
     void Start(){
         player = GameObject.FindWithTag("Player");
         player_exp = player.GetComponent<PlayerEXP>();
-
-        Canvas = Camera.main.gameObject.transform.Find("Canvas").gameObject;
-        Pause_Menu = Camera.main.gameObject.transform.Find("Pause").gameObject;
-        PauseMenu_Object = Pause_Menu.GetComponent<PauseMenu>();
+        pause_handler = PauseHandler.GetComponent<PauseHandler>();
     }
 
 
@@ -41,7 +36,7 @@ public class Alien2Movement : MonoBehaviour
                 enemy_spawning.enemys_to_spawn_in_wave += 1;
             }
 
-            if ((player_exp.return_pause_all() | PauseMenu_Object.IsGamePaused()) == false) {
+            if (pause_handler.GameIsPaused == false) {
                 player_transform = GameObject.FindWithTag("Player").transform;
                 Vector3 directionToPlayer = player_transform.position - transform.position;
                 distance = Vector3.Distance (player_transform.position, transform.position);

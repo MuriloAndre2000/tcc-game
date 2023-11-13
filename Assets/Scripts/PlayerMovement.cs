@@ -22,8 +22,8 @@ public class PlayerMovement : MonoBehaviour
     private AudioSource m_AudioSource; //The thing to play the audio
 
     private GameObject Canvas;
-    private GameObject Pause_Menu;
-    private PauseMenu PauseMenu_Object;
+    public GameObject PauseHandler;
+    private PauseHandler pause_handler;
     private SelectWeaponLoading SelectWeaponLoadingObj;
 
     public Vector3 worldPosition;
@@ -36,6 +36,8 @@ public class PlayerMovement : MonoBehaviour
     private GameObject player;   
     private PlayerEXP player_exp;
 
+    private  Animator animator;
+
 
     private void Awake()
     {
@@ -47,12 +49,13 @@ public class PlayerMovement : MonoBehaviour
         player_exp = player.GetComponent<PlayerEXP>();
 
         Canvas = Camera.main.gameObject.transform.Find("Canvas").gameObject;
-        Pause_Menu = Camera.main.gameObject.transform.Find("Pause").gameObject;
-        PauseMenu_Object = Pause_Menu.GetComponent<PauseMenu>();
+        pause_handler = PauseHandler.GetComponent<PauseHandler>();
 
         SelectWeaponLoadingObj = SelectWeapon.GetComponent<SelectWeaponLoading>();
 
         m_AudioSource = GetComponent<AudioSource>();
+
+        animator = GetComponent<Animator>();
     }
 
     private void playShootingSound(AudioClip ShootingSound){
@@ -76,6 +79,12 @@ public class PlayerMovement : MonoBehaviour
             
         if (movementDirection.sqrMagnitude > 1f){
             movementDirection.Normalize();
+        }
+        if (movementDirection.sqrMagnitude > 0f){
+            animator.SetBool("is_walking", true);
+        }
+        else{
+            animator.SetBool("is_walking", false);
         }
         int layerMask = 1 << LayerMask.NameToLayer("Untagged");
         RaycastHit hit;
@@ -145,7 +154,7 @@ public class PlayerMovement : MonoBehaviour
     private void FixedUpdate()
     {
         if (GameObject.FindWithTag("Player") is not null){
-            stop_moving = player_exp.return_pause_all() | PauseMenu_Object.IsGamePaused();
+            stop_moving = pause_handler.GameIsPaused;
             movementSpeed = (float) (1 + .1f*player_exp.return_power_up_speed_increase())*initialMovementSpeed;
         }
 

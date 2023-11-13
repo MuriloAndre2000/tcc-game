@@ -66,7 +66,7 @@ public class EnemySpawning : MonoBehaviour
 
             stop_spawning = player_exp.return_pause_all() | PauseMenu_Object.IsGamePaused();
             
-            max_enemies = 30 + (int) Mathf.Pow(2, player_exp.return_level());
+            max_enemies = 30;
 
             TMPro.TextMeshProUGUI wave_text = Wave.GetComponent<TMPro.TextMeshProUGUI>();
             wave_text.text = "Wave " + wave;
@@ -81,7 +81,7 @@ public class EnemySpawning : MonoBehaviour
             if (enemys_to_spawn_in_wave == 0){
                 if(GameObject.FindGameObjectsWithTag("Enemy").Length == 3){ // Apenas os Prefabs
                     wave += 1;
-                    enemys_to_spawn_in_wave = (int) Mathf.Pow(3, wave);
+                    enemys_to_spawn_in_wave = (int) 2 + wave * wave;
 
                     string jsonText = File.ReadAllText(Application.persistentDataPath + "/credentials.json");
                     Info data = JsonUtility.FromJson<Info>(jsonText);
@@ -100,21 +100,7 @@ public class EnemySpawning : MonoBehaviour
                     request.uploadHandler = (UploadHandler)new UploadHandlerRaw(jsonBytes);
                     request.downloadHandler = (DownloadHandler)new DownloadHandlerBuffer();
                     request.SetRequestHeader("Content-Type", "application/json");
-
-
-
                     request.SendWebRequest();
-                    /*
-                    if (request.result == UnityWebRequest.Result.Success)
-                    {
-                        Debug.Log("POST request successful!");
-                        Debug.Log(request.downloadHandler.text); // Response from server
-                    }
-                    else
-                    {
-                        Debug.LogError("Error: " + request.error);
-                    }
-                    */
                 }    
             }
             if (TimeToRespawn < 0f 
@@ -148,7 +134,6 @@ public class EnemySpawning : MonoBehaviour
 
                     GameObject newEnemy = Instantiate(enemyPrefab, enemy_position, Quaternion.identity);
                     newEnemy.GetComponent<Alien1Movement>().is_spawned = true;
-                    Destroy(newEnemy, 60);
                     TimeToRespawn = 1f * Mathf.Pow(.8f, player_exp.return_level() + wave);
                     enemys_to_spawn_in_wave -= 1;
                 }
@@ -162,7 +147,6 @@ public class EnemySpawning : MonoBehaviour
 
                     GameObject newEnemy = Instantiate(enemyPrefab2, enemy_position, Quaternion.identity);
                     newEnemy.GetComponent<Alien2Movement>().is_spawned = true;
-                    Destroy(newEnemy, 60);
                     TimeToRespawn = 1f * Mathf.Pow(.99f, player_exp.return_level() + wave);
                     enemys_to_spawn_in_wave -= 1;
                 }
@@ -176,7 +160,6 @@ public class EnemySpawning : MonoBehaviour
 
                     GameObject newEnemy = Instantiate(enemyPrefab3, enemy_position, Quaternion.identity);
                     newEnemy.GetComponent<Alien1Movement>().is_spawned = true;
-                    Destroy(newEnemy, 60);
                     TimeToRespawn = 1f * Mathf.Pow(.99f, player_exp.return_level() + wave);
                     enemys_to_spawn_in_wave -= 3;
                 }
