@@ -13,6 +13,8 @@ public class PlayerWeaponChoosing : MonoBehaviour
     private GameObject Canvas;
     private GameObject Select_Weapon;
     private RectTransform Select_Weapon_Transform;
+
+    public GameObject WeaponMunition;
     
     public string[] weapon_list = {"pistol"};
 
@@ -21,6 +23,13 @@ public class PlayerWeaponChoosing : MonoBehaviour
     public GameObject shotgun;
     public GameObject granade;
     public GameObject RPG;
+
+    string str_pistol      = "pistol";
+    string str_machine_gun = "machine_gun";
+    string str_shotgun     = "shotgun";
+    string str_granade     = "granade";
+    string str_RPG         = "RPG";
+
     // Start is called before the first frame update
     // Weapon_ID
     // 1: Pistol
@@ -44,6 +53,7 @@ public class PlayerWeaponChoosing : MonoBehaviour
         Change_Weapons_In_UI();
         Change_Weapons();
         Change_Select_Weapon();
+        Show_Munition_Weapons();
         if(Input.GetKeyDown("1")){
              Weapon_Slot_ID = 1;
              Change_Select_Weapon();
@@ -58,12 +68,38 @@ public class PlayerWeaponChoosing : MonoBehaviour
         }
     }
 
+    void Show_Munition_Weapons(){
+        int pos_pistol      = Array.IndexOf(weapon_list, str_pistol);
+        int pos_machine_gun = Array.IndexOf(weapon_list, str_machine_gun);
+        int pos_shotgun     = Array.IndexOf(weapon_list, str_shotgun);
+        int pos_granade     = Array.IndexOf(weapon_list, str_granade);
+        int pos_RPG         = Array.IndexOf(weapon_list, str_RPG);
+
+        WeaponMunitionHandler weapon_munition_handler = gameObject.GetComponent<WeaponMunitionHandler>();
+
+        if (Weapon_Slot_ID - 1 == pos_pistol){
+            TMPro.TextMeshProUGUI weapon_munition_text = WeaponMunition.GetComponent<TMPro.TextMeshProUGUI>();
+            weapon_munition_text.text = "∞/∞";
+        }   
+        if (Weapon_Slot_ID - 1 == pos_machine_gun){
+            TMPro.TextMeshProUGUI weapon_munition_text = WeaponMunition.GetComponent<TMPro.TextMeshProUGUI>();
+            weapon_munition_text.text = weapon_munition_handler.machine_gun + "/" + weapon_munition_handler.max_machine_gun; 
+        }   
+        if (Weapon_Slot_ID - 1 == pos_shotgun){
+            TMPro.TextMeshProUGUI weapon_munition_text = WeaponMunition.GetComponent<TMPro.TextMeshProUGUI>();
+            weapon_munition_text.text = weapon_munition_handler.shotgun + "/" + weapon_munition_handler.max_shotgun;
+        }   
+        if (Weapon_Slot_ID - 1 == pos_granade){
+            TMPro.TextMeshProUGUI weapon_munition_text = WeaponMunition.GetComponent<TMPro.TextMeshProUGUI>();
+            weapon_munition_text.text = weapon_munition_handler.granade + "/" + weapon_munition_handler.max_granade;
+        }   
+        if (Weapon_Slot_ID - 1 == pos_RPG){
+            TMPro.TextMeshProUGUI weapon_munition_text = WeaponMunition.GetComponent<TMPro.TextMeshProUGUI>();
+            weapon_munition_text.text = weapon_munition_handler.rpg + "/" + weapon_munition_handler.max_rpg;
+        }        
+    }
+
     void Change_Weapons(){
-        string str_pistol      = "pistol";
-        string str_machine_gun = "machine_gun";
-        string str_shotgun     = "shotgun";
-        string str_granade     = "granade";
-        string str_RPG         = "RPG";
 
         int pos_pistol      = Array.IndexOf(weapon_list, str_pistol);
         int pos_machine_gun = Array.IndexOf(weapon_list, str_machine_gun);
@@ -89,12 +125,6 @@ public class PlayerWeaponChoosing : MonoBehaviour
     }
 
     void Change_Weapons_In_UI(){
-        string str_pistol      = "pistol";
-        string str_machine_gun = "machine_gun";
-        string str_shotgun     = "shotgun";
-        string str_granade     = "granade";
-        string str_RPG         = "RPG";
-
         int pos_pistol      = Array.IndexOf(weapon_list, str_pistol);
         int pos_machine_gun = Array.IndexOf(weapon_list, str_machine_gun);
         int pos_shotgun     = Array.IndexOf(weapon_list, str_shotgun);
@@ -246,5 +276,25 @@ public class PlayerWeaponChoosing : MonoBehaviour
             }
         }
         Select_Weapon_Transform.anchoredPosition  = new Vector2(posX,-200);// trocar por Posição Relativa
+    }
+
+    public void BuyWeapon(string weapon_str){
+        if(weapon_list.Length == 1){
+            weapon_list = new string[] {weapon_list[0], weapon_str};
+        }
+        else if(weapon_list.Length == 2){
+            weapon_list = new string[] {weapon_list[0], weapon_list[1], weapon_str};
+        }
+        else{
+            if (Weapon_Slot_ID == 1){
+                weapon_list[0] = weapon_str;
+            }
+            if (Weapon_Slot_ID == 2){
+                weapon_list[1] = weapon_str;
+            }
+            if (Weapon_Slot_ID == 3){
+                weapon_list[2] = weapon_str;
+            }
+        }
     }
 }

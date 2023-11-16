@@ -11,6 +11,8 @@ TagManager:
   - Enemy Portal
   - Building
   - Frontier
+  - AK47
+  - Shotgun
   layers:
   - Default
   - TransparentFX

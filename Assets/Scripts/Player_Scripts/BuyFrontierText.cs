@@ -6,6 +6,8 @@ public class BuyFrontierText : MonoBehaviour
 {
     public GameObject BuyText;
     private bool activate = false;
+    public GameObject EnemySpawning1;
+    public GameObject EnemySpawning2;
 
     // Update is called once per frame
     void Update()
@@ -23,10 +25,16 @@ public class BuyFrontierText : MonoBehaviour
                     if (player_exp.player_exp >=30){
                         player_exp.player_exp -= 30;
                         frontier.SetActive(false);
+                        EnemySpawning1.SetActive(true);
+                        EnemySpawning2.SetActive(true);
                     }
                 }
            }
         } 
+        if(activate){
+            TMPro.TextMeshProUGUI buy_text = BuyText.GetComponent<TMPro.TextMeshProUGUI>();
+            buy_text.text = "Aperte E para\nLiberar nova área por 30";
+        }
         BuyText.SetActive(activate);
 
     }

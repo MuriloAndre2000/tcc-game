@@ -63,7 +63,7 @@ public class EnemySpawning : MonoBehaviour
     void Update()
     {
         if (GameObject.FindWithTag("Player") is not null){
-
+            enemy_spawning = GameObject.FindGameObjectsWithTag("Enemy Portal");
             stop_spawning = player_exp.return_pause_all() | PauseMenu_Object.IsGamePaused();
             
             max_enemies = 30;

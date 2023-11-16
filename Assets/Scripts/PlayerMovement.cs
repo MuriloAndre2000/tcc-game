@@ -8,6 +8,10 @@ public class PlayerMovement : MonoBehaviour
     public float movementSpeed; // Speed at which the character moves
     public float rotationSpeed = 10f; // Speed at which the character rotates
 
+    PlayerWeaponChoosing player_weapon_choosing;
+
+    WeaponMunitionHandler weapon_munition_handler;
+
     private Rigidbody rb;
 
     public LineRenderer lr;
@@ -56,6 +60,8 @@ public class PlayerMovement : MonoBehaviour
         m_AudioSource = GetComponent<AudioSource>();
 
         animator = GetComponent<Animator>();
+
+        weapon_munition_handler = gameObject.GetComponent<WeaponMunitionHandler>();
     }
 
     private void playShootingSound(AudioClip ShootingSound){
@@ -174,17 +180,18 @@ public class PlayerMovement : MonoBehaviour
                 }
             }
             if(PlayerWeaponChoosing.Weapon_ID == 2){
-                if (Input.GetMouseButton(0) & time_to_shoot_again ==0){
+                if (Input.GetMouseButton(0) & time_to_shoot_again ==0 & weapon_munition_handler.machine_gun > 0){
                     Quaternion direction = transform.rotation;
                     float noiseStrife = Random.Range(0, 10);
                     direction *= Quaternion.Euler(0f, noiseStrife-5, 0f);
 
                     playShootingSound(machineGunShootingSound);
                     CreateBullet(rb.position, direction, 25, .25f);
+                    weapon_munition_handler.machine_gun -=1;
                 }
             }
             if(PlayerWeaponChoosing.Weapon_ID == 3){
-                if (Input.GetMouseButton(0) & time_to_shoot_again ==0){
+                if (Input.GetMouseButton(0) & time_to_shoot_again ==0 & weapon_munition_handler.shotgun > 0){
                     float[] directions = {-20f,-10f,0f,10f,20f};
 
                     playShootingSound(shotgunShootingSound);
@@ -194,11 +201,12 @@ public class PlayerMovement : MonoBehaviour
                         direction *= Quaternion.Euler(0f, directions[i], 0f);
                         CreateBullet(rb.position, direction, 20, 1.5f);
                     }
+                    weapon_munition_handler.shotgun -=1;
                 }
             }
 
             if(PlayerWeaponChoosing.Weapon_ID == 4){
-                if (Input.GetMouseButton(0) & time_to_shoot_again ==0){
+                if (Input.GetMouseButton(0) & time_to_shoot_again ==0 & weapon_munition_handler.granade > 0){
                     Quaternion direction = transform.rotation;
                     direction *= Quaternion.Euler(-45f, 0f, 0f);
                     GameObject newGrenade = CreateBullet(rb.position, direction, 0, 1f);
@@ -208,10 +216,11 @@ public class PlayerMovement : MonoBehaviour
                     grenade.fuseTime = .5f;
                     grenade.is_grenade = true;
                     grenade.movementSpeed = 5f;
+                    weapon_munition_handler.granade -=1;
                 }
             }
             if(PlayerWeaponChoosing.Weapon_ID == 5){
-                if (Input.GetMouseButton(0) & time_to_shoot_again ==0){
+                if (Input.GetMouseButton(0) & time_to_shoot_again ==0 & weapon_munition_handler.rpg > 0){
                     Quaternion direction = transform.rotation;
                     GameObject newGrenade = CreateBullet(rb.position, direction, 0, 1f);
                     BulletBehavior grenade = newGrenade.GetComponent<BulletBehavior>();
@@ -219,6 +228,7 @@ public class PlayerMovement : MonoBehaviour
                     grenade.explosionRadius = 5f;
                     grenade.is_explosive = true;
                     grenade.movementSpeed = 15f;
+                    weapon_munition_handler.rpg -=1;
                 }
             }
 
