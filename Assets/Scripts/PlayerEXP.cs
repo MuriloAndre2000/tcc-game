@@ -10,12 +10,17 @@ public class PlayerEXP : MonoBehaviour
 
     public bool pause_all = false;
 
-    public int power_up_bullet_damage = 0; //DONE
-    public int power_up_bullet_size = 0; //DONE
-    public int power_up_health_increase = 0; //DONE
+    public int power_up_bullet_damage      = 0; //DONE
+    public int power_up_bullet_size        = 0; //DONE
+    public int power_up_health_increase    = 0; //DONE
     public int power_up_fire_rate_increase = 0; //DONE
-    public int power_up_speed_increase = 0; //DONE
-    public int power_up_field_radius = 0; //DONE
+    public int power_up_speed_increase     = 0; //DONE
+    public int power_up_field_radius       = 0; //DONE
+
+    public int power_up_explosive_bullet = 0;
+    public int power_up_freeze_enemies   = 0;
+    public int power_up_fire_enemies     = 0;
+    public int power_up_rebound          = 0;
 
     private Camera camera_1;
     private GameObject Canvas;
@@ -182,6 +187,22 @@ public class PlayerEXP : MonoBehaviour
 
     public int return_power_up_field_radius(){
         return power_up_field_radius;
+    }
+
+    public int return_power_up_explosive_bullet(){
+        return power_up_explosive_bullet;
+    }
+
+    public int return_power_up_freeze_enemies(){
+        return power_up_freeze_enemies;
+    }
+
+    public int return_power_up_fire_enemies(){
+        return power_up_fire_enemies;
+    }
+    
+    public int return_power_up_rebound(){
+        return power_up_rebound;
     }
 
     private void OnCollisionEnter(Collision collision)

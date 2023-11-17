@@ -14,6 +14,9 @@ public class PauseHandler : MonoBehaviour
     private GameObject Loot_Menu;
     private LootMenu LootMenu_Object;
 
+    public GameObject PowerUP_Menu;
+    private OpenPowerUp PowerUP_Object;
+
     public bool GameIsPaused = false;
 
 
@@ -29,6 +32,8 @@ public class PauseHandler : MonoBehaviour
 
         Loot_Menu = Camera.main.gameObject.transform.Find("Loot").gameObject;
         LootMenu_Object = Loot_Menu.GetComponent<LootMenu>();
+
+        PowerUP_Object = PowerUP_Menu.GetComponent<OpenPowerUp>();
         
     }
 
@@ -42,6 +47,9 @@ public class PauseHandler : MonoBehaviour
             GameIsPaused = true;
         }
         else if(LootMenu_Object.IsGamePaused() == true){
+            GameIsPaused = true;
+        }
+        else if(PowerUP_Object.IsGamePaused() == true){
             GameIsPaused = true;
         }
         else{

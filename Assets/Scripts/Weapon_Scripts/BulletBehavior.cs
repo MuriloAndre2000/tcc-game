@@ -10,6 +10,7 @@ public class BulletBehavior : MonoBehaviour
     public float explosionForce = 0f;
     public float explosionRadius = 0f;
     public float fuseTime = 3f;
+    public int explosionDamage = 50;
     public ParticleSystem explosionEffect;
 
     public bool is_explosive = false;
@@ -36,7 +37,7 @@ public class BulletBehavior : MonoBehaviour
                 EnemyHealth enemyHealth = nearbyObject.GetComponent<EnemyHealth>();
                 if (enemyHealth != null)
                 {
-                    enemyHealth.TakeDamage(50);
+                    enemyHealth.TakeDamage(explosionDamage);
                 }
             }
 

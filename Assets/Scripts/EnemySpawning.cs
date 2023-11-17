@@ -19,8 +19,8 @@ public class EnemySpawning : MonoBehaviour
 
     private bool stop_spawning = false;
 
-    //private int min_radius = 6;
-    //private int max_radius = 8;
+    public GameObject PowerUpsHandler;
+    private OpenPowerUp open_power_up;
 
     public int wave = 0;
     public int enemys_to_spawn_in_wave = 0;
@@ -29,6 +29,9 @@ public class EnemySpawning : MonoBehaviour
     private GameObject Pause_Menu;
     private PauseMenu PauseMenu_Object;
     private GameObject Wave;
+
+    public GameObject PauseHandler;
+    private PauseHandler pause_handler;
 
     private GameObject[] enemy_spawning;
 
@@ -48,9 +51,13 @@ public class EnemySpawning : MonoBehaviour
     {
         Canvas = Camera.main.gameObject.transform.Find("Canvas").gameObject;
 
+        pause_handler = PauseHandler.GetComponent<PauseHandler>();
+
         Pause_Menu = Camera.main.gameObject.transform.Find("Pause").gameObject;
         PauseMenu_Object = Pause_Menu.GetComponent<PauseMenu>();
         
+        open_power_up = PowerUpsHandler.GetComponent<OpenPowerUp>();
+
         enemy_spawning = GameObject.FindGameObjectsWithTag("Enemy Portal");
 
         player = GameObject.FindWithTag("Player");
@@ -74,7 +81,7 @@ public class EnemySpawning : MonoBehaviour
         else{
             stop_spawning = true;
         }
-        if (stop_spawning == false){
+        if (pause_handler.GameIsPaused == false){
             if (TimeToRespawn >= 0){
                 TimeToRespawn -= Time.deltaTime;
             }
@@ -82,6 +89,10 @@ public class EnemySpawning : MonoBehaviour
                 if(GameObject.FindGameObjectsWithTag("Enemy").Length == 3){ // Apenas os Prefabs
                     wave += 1;
                     enemys_to_spawn_in_wave = (int) 2 + wave * wave;
+                    
+                    if(wave != 1){
+                        open_power_up.OpenPowerUpMenu();
+                    }
 
                     string jsonText = File.ReadAllText(Application.persistentDataPath + "/credentials.json");
                     Info data = JsonUtility.FromJson<Info>(jsonText);

@@ -152,6 +152,15 @@ public class PlayerMovement : MonoBehaviour
 
         time_to_shoot_again = (float) time_to_shoot_again_base * Mathf.Pow(.9f, fire_rate_increase);
         initial_time_to_shoot_again = time_to_shoot_again;
+
+
+        if (player_exp.return_power_up_explosive_bullet() > 0){
+            BulletBehavior bullet_behavior = newBullet.GetComponent<BulletBehavior>();
+            bullet_behavior.explosionForce = 100f;
+            bullet_behavior.explosionRadius = .5f;
+            bullet_behavior.explosionDamage = 5;
+            bullet_behavior.is_explosive = true;
+        }
         return newBullet;
     }
 
@@ -212,7 +221,7 @@ public class PlayerMovement : MonoBehaviour
                     GameObject newGrenade = CreateBullet(rb.position, direction, 0, 1f);
                     BulletBehavior grenade = newGrenade.GetComponent<BulletBehavior>();
                     grenade.explosionForce = 100f;
-                    grenade.explosionRadius = 5f;
+                    grenade.explosionRadius = 3f;
                     grenade.fuseTime = .5f;
                     grenade.is_grenade = true;
                     grenade.movementSpeed = 5f;
@@ -225,7 +234,7 @@ public class PlayerMovement : MonoBehaviour
                     GameObject newGrenade = CreateBullet(rb.position, direction, 0, 1f);
                     BulletBehavior grenade = newGrenade.GetComponent<BulletBehavior>();
                     grenade.explosionForce = 100f;
-                    grenade.explosionRadius = 5f;
+                    grenade.explosionRadius = 3f;
                     grenade.is_explosive = true;
                     grenade.movementSpeed = 15f;
                     weapon_munition_handler.rpg -=1;
