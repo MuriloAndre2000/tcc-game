@@ -13,6 +13,9 @@ public class BulletBehavior : MonoBehaviour
     public int explosionDamage = 50;
     public ParticleSystem explosionEffect;
 
+    public int fire_amount = 0;
+    public int freeze_amount = 0;
+
     public bool is_explosive = false;
     public bool is_grenade   = false;
     private bool exploded = false;

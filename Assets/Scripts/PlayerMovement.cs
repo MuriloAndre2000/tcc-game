@@ -153,14 +153,17 @@ public class PlayerMovement : MonoBehaviour
         time_to_shoot_again = (float) time_to_shoot_again_base * Mathf.Pow(.9f, fire_rate_increase);
         initial_time_to_shoot_again = time_to_shoot_again;
 
-
+        BulletBehavior bullet_behavior = newBullet.GetComponent<BulletBehavior>();
         if (player_exp.return_power_up_explosive_bullet() > 0){
-            BulletBehavior bullet_behavior = newBullet.GetComponent<BulletBehavior>();
-            bullet_behavior.explosionForce = 100f;
-            bullet_behavior.explosionRadius = .5f;
-            bullet_behavior.explosionDamage = 5;
+            bullet_behavior.explosionForce = 100f * player_exp.return_power_up_explosive_bullet();
+            bullet_behavior.explosionRadius = .5f * player_exp.return_power_up_explosive_bullet();
+            bullet_behavior.explosionDamage = 5 * player_exp.return_power_up_explosive_bullet();
             bullet_behavior.is_explosive = true;
         }
+
+        bullet_behavior.fire_amount = player_exp.return_power_up_fire_enemies();
+        bullet_behavior.freeze_amount = player_exp.return_power_up_freeze_enemies();
+
         return newBullet;
     }
 

@@ -12,6 +12,9 @@ public class EnemyHealth : MonoBehaviour
 
     public GameObject prefabDamageText;
 
+    public int fire_amount_total = 0;
+    public int freeze_amount_total = 0;
+
     private void Start()
     {
         currentHealth = maxHealth;
@@ -19,6 +22,14 @@ public class EnemyHealth : MonoBehaviour
         //green = enemyCanvas.transform.Find("Green").gameObject;
         //healthBar = green.GetComponent<RectTransform>();
         //healthBar.sizeDelta = new Vector2(healthBar.sizeDelta.x,3*currentHealth/maxHealth);
+    }
+
+    public void receiveFirePoint(int fire_amount){
+        fire_amount_total += fire_amount;
+    }
+
+    public void receiveFreezePoint(int freeze_amount){
+        freeze_amount_total += freeze_amount;
     }
 
     public void TakeDamage(int damageAmount)
