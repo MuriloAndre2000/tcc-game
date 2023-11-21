@@ -13,6 +13,9 @@ TagManager:
   - Frontier
   - AK47
   - Shotgun
+  - PauseHandler
+  - DamageText
+  - AlienProjectile
   layers:
   - Default
   - TransparentFX

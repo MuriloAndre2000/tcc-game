@@ -23,6 +23,7 @@ public class Alien1Movement : MonoBehaviour
     void Start(){
         player = GameObject.FindWithTag("Player");
         player_exp = player.GetComponent<PlayerEXP>();
+        PauseHandler = GameObject.FindWithTag("PauseHandler");
         pause_handler = PauseHandler.GetComponent<PauseHandler>();
 
         agent = GetComponent<UnityEngine.AI.NavMeshAgent>();

@@ -18,10 +18,8 @@ public class EnemyHealth : MonoBehaviour
     private void Start()
     {
         currentHealth = maxHealth;
-        //enemyCanvas = gameObject.transform.Find("Canvas").gameObject;
-        //green = enemyCanvas.transform.Find("Green").gameObject;
-        //healthBar = green.GetComponent<RectTransform>();
-        //healthBar.sizeDelta = new Vector2(healthBar.sizeDelta.x,3*currentHealth/maxHealth);
+        prefabDamageText = GameObject.FindWithTag("DamageText");
+        XPprefab = GameObject.FindWithTag("XP");
     }
 
     public void receiveFirePoint(int fire_amount){

@@ -86,7 +86,7 @@ public class EnemySpawning : MonoBehaviour
                 TimeToRespawn -= Time.deltaTime;
             }
             if (enemys_to_spawn_in_wave == 0){
-                if(GameObject.FindGameObjectsWithTag("Enemy").Length == 3){ // Apenas os Prefabs
+                if(GameObject.FindGameObjectsWithTag("Enemy").Length == 0){ // Apenas os Prefabs
                     wave += 1;
                     enemys_to_spawn_in_wave = (int) 2 + wave * wave;
                     
@@ -114,6 +114,9 @@ public class EnemySpawning : MonoBehaviour
                     request.SendWebRequest();
                 }    
             }
+            else if(enemys_to_spawn_in_wave < 0){
+                enemys_to_spawn_in_wave = 0;
+            }
             if (TimeToRespawn < 0f 
                 & GameObject.FindGameObjectsWithTag("Enemy").Length <= max_enemies
                 & enemys_to_spawn_in_wave > 0){
@@ -121,16 +124,16 @@ public class EnemySpawning : MonoBehaviour
                 int enemy_choosen = 0;
                 if (wave >= 4 & wave <= 6){
                     int random_enemy = Random.Range(0,10);
-                    if(random_enemy >=8){
+                    if(random_enemy >=6){
                         enemy_choosen = 1;
                     }
                 }
-                if(wave >= 7 & wave <= 10){
+                if(wave >= 7 & wave <= 100){
                     int random_enemy = Random.Range(0,10);
-                    if(random_enemy >=4 & random_enemy <=7){
+                    if(random_enemy >=5 & random_enemy <=7){
                         enemy_choosen = 1;
                     }
-                    if(random_enemy >=8){
+                    if(random_enemy >=9){
                         enemy_choosen = 2;
                     }
                 }

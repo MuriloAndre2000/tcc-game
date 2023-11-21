@@ -17,12 +17,26 @@ public class Alien2Movement : MonoBehaviour
 
     public GameObject projectilePrefab;
 
+    private UnityEngine.AI.NavMeshAgent agent;
+
     public bool is_spawned = false;
 
     void Start(){
         player = GameObject.FindWithTag("Player");
         player_exp = player.GetComponent<PlayerEXP>();
+        PauseHandler = GameObject.FindWithTag("PauseHandler");
         pause_handler = PauseHandler.GetComponent<PauseHandler>();
+
+        projectilePrefab = GameObject.FindWithTag("AlienProjectile");
+
+        agent = GetComponent<UnityEngine.AI.NavMeshAgent>();
+    }
+
+    private bool CheckIfRayCastHitPlayer(Vector3 direction, int layerMask){
+        RaycastHit hit;
+        return Physics.Raycast(transform.position, 
+                            transform.TransformDirection(direction), 
+                            out hit, Mathf.Infinity, layerMask);
     }
 
 
@@ -39,14 +53,25 @@ public class Alien2Movement : MonoBehaviour
             if (pause_handler.GameIsPaused == false) {
                 player_transform = GameObject.FindWithTag("Player").transform;
                 Vector3 directionToPlayer = player_transform.position - transform.position;
+
+                int layerMask = 1 << LayerMask.NameToLayer("Player");
+
                 distance = Vector3.Distance (player_transform.position, transform.position);
 
                 directionToPlayer.Normalize();
-                if (distance > 5 & distance < 100){
-                    // Move the enemy towards the player
+
+                agent.destination = player_transform.position; //Define the destination to the Player
+                agent.updatePosition = false;
+
+                // Move the enemy towards the player
+                Quaternion targetRotation = Quaternion.LookRotation(directionToPlayer);
+
+                transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
+                if(CheckIfRayCastHitPlayer(directionToPlayer, layerMask)){ // If Alien is seeing the Player no need to use PathFinding
                     transform.position += directionToPlayer * movementSpeed * Time.deltaTime;
-                    Quaternion targetRotation = Quaternion.LookRotation(directionToPlayer);
-                    transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
+                }
+                else{
+                    transform.position = agent.nextPosition;
                 }
                 if (distance < 5 & time_to_attack_again == 0){
                     Quaternion direction = Quaternion.FromToRotation(Vector3.forward,directionToPlayer);
@@ -65,6 +90,20 @@ public class Alien2Movement : MonoBehaviour
                 if (time_to_attack_again > 0){
                     time_to_attack_again -= Time.deltaTime;
                 }
+            }
+            else{
+                player_transform = GameObject.FindWithTag("Player").transform;
+                Vector3 directionToPlayer = player_transform.position - transform.position;
+
+                int layerMask = 1 << LayerMask.NameToLayer("Player");
+
+                distance = Vector3.Distance (player_transform.position, transform.position);
+
+                directionToPlayer.Normalize();
+                if(!CheckIfRayCastHitPlayer(directionToPlayer, layerMask)){ // If Alien is seeing the Player no need to use PathFinding
+                    agent.destination = gameObject.transform.position;
+                }
+                agent.updatePosition = false;
             }
         }
     }

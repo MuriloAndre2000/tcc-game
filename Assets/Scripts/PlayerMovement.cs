@@ -137,7 +137,7 @@ public class PlayerMovement : MonoBehaviour
     private GameObject CreateBullet(Vector3 position, Quaternion direction, int base_damage, float time_to_shoot_again_base){
         GameObject newBullet = Instantiate(bulletPrefab, position, direction);
         int bullet_damage = player_exp.return_power_up_bullet_damage();
-        float damage = (float) (1 + .5f * bullet_damage) * base_damage;
+        float damage = (float)  base_damage + base_damage*bullet_damage/2;
         newBullet.GetComponent<BulletBehavior>().damage = (int) damage;
 
         int bullet_size_increase = player_exp.return_power_up_bullet_size();

@@ -13,6 +13,8 @@ public class OpenPowerUp : MonoBehaviour
     public GameObject PowerUpOption2;
     public GameObject PowerUpOption3;
 
+    public GameObject XPprefab;
+
     public bool IsGamePaused(){
         return GameIsPaused;
     }
@@ -34,10 +36,20 @@ public class OpenPowerUp : MonoBehaviour
             if(Input.GetKeyDown(KeyCode.Escape)){
                 PowerUpActivated = false;
             }
+            foreach(GameObject object_XP in GameObject.FindGameObjectsWithTag("XP")){
+                XPMovement xp_movement = object_XP.GetComponent<XPMovement>();
+                xp_movement.distance_inital = 1000f;
+                xp_movement.movementSpeed = 10;
+            }
         }
         else{
             GameIsPaused = false;
             PowerUpMenuUI.SetActive(false);
+            foreach(GameObject object_XP in GameObject.FindGameObjectsWithTag("XP")){
+                XPMovement xp_movement = object_XP.GetComponent<XPMovement>();
+                xp_movement.distance_inital = xp_movement.min_distance_inital;
+                xp_movement.movementSpeed = xp_movement.inital_movementSpeed;
+            }
         }
         
     }

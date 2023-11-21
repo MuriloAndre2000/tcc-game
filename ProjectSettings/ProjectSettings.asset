@@ -689,11 +689,11 @@ PlayerSettings:
   m_MobileRenderingPath: 1
   metroPackageName: Calicore
   metroPackageVersion: 
-  metroCertificatePath: 
+  metroCertificatePath: Assets/WSATestCertificate.pfx
   metroCertificatePassword: 
-  metroCertificateSubject: 
-  metroCertificateIssuer: 
-  metroCertificateNotAfter: 0000000000000000
+  metroCertificateSubject: MuriloFelipe
+  metroCertificateIssuer: MuriloFelipe
+  metroCertificateNotAfter: 803c117dd638db01
   metroApplicationDescription: Calicore
   wsaImages: {}
   metroTileShortName: 

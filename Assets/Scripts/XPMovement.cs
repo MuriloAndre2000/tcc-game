@@ -6,11 +6,15 @@ public class XPMovement : MonoBehaviour
 {
     public Transform player_transform;
     public float movementSpeed = 5f;
+    public float inital_movementSpeed = 5f;
     private float distance;
     private float rotationSpeed = 10f;
 
     private GameObject player;
     private PlayerEXP player_exp;
+
+    public float min_distance_inital = 3f;
+    public float distance_inital = 3f;
 
     // Update is called once per frame
     void Update()
@@ -25,7 +29,7 @@ public class XPMovement : MonoBehaviour
                 distance = Vector3.Distance (player_transform.position, transform.position);
 
                 directionToPlayer.Normalize();
-                if (distance <= 2.5){
+                if (distance <= distance_inital){
                     // Move the enemy towards the player
                     transform.position += directionToPlayer * movementSpeed * Time.deltaTime;
                     Quaternion targetRotation = Quaternion.LookRotation(directionToPlayer);
