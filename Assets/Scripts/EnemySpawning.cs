@@ -88,15 +88,16 @@ public class EnemySpawning : MonoBehaviour
             if (enemys_to_spawn_in_wave == 0){
                 if(GameObject.FindGameObjectsWithTag("Enemy").Length == 0){ // Apenas os Prefabs
                     wave += 1;
-                    enemys_to_spawn_in_wave = (int) 2 + wave * wave;
+                    enemys_to_spawn_in_wave = (int) 2 + (wave + 1) * (wave + 1);
                     
                     if(wave != 1){
                         open_power_up.OpenPowerUpMenu();
                     }
 
-                    string jsonText = File.ReadAllText(Application.persistentDataPath + "/credentials.json");
-                    Info data = JsonUtility.FromJson<Info>(jsonText);
-                    string username = data.username;
+                    //string jsonText = File.ReadAllText(Application.persistentDataPath + "/credentials.json");
+                    //Info data = JsonUtility.FromJson<Info>(jsonText);
+                    //string username = data.username;
+                    string username = PlayerPrefs.GetString("username");
 
                     wave_info user_info = new wave_info();
                     user_info.username = username;

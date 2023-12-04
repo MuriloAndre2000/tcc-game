@@ -28,10 +28,11 @@ public class SendPositionEverySecond : MonoBehaviour
 
         if(TimeToSendPosition == 0){
 
-            string jsonText = File.ReadAllText(Application.persistentDataPath + "/credentials.json");
-            Info data = JsonUtility.FromJson<Info>(jsonText);
-            string username = data.username;
-        
+            //string jsonText = File.ReadAllText(Application.persistentDataPath + "/credentials.json");
+            //Info data = JsonUtility.FromJson<Info>(jsonText);
+            //string username = data.username;
+            string username = PlayerPrefs.GetString("username");
+
             position_info user_position_info = new position_info();
             user_position_info.username = username;
             Transform player_transform = gameObject.transform;

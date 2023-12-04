@@ -36,6 +36,15 @@ public class Alien1Movement : MonoBehaviour
                             out hit, Mathf.Infinity, layerMask);
     }
 
+    private void UpdateTimeToAttackAgain(){
+        if (time_to_attack_again < 0){
+            time_to_attack_again = 0f;
+        }
+        if (time_to_attack_again > 0){
+            time_to_attack_again -= Time.deltaTime;
+        }
+    }
+
 
     // Update is called once per frame
     void Update()
@@ -93,12 +102,7 @@ public class Alien1Movement : MonoBehaviour
                     }
                 }
 
-                if (time_to_attack_again < 0){
-                    time_to_attack_again = 0f;
-                }
-                if (time_to_attack_again > 0){
-                    time_to_attack_again -= Time.deltaTime;
-                }
+                UpdateTimeToAttackAgain();
             }
             else{
                 player_transform = GameObject.FindWithTag("Player").transform;

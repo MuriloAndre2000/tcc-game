@@ -9,11 +9,13 @@ public class ClickOption1 : MonoBehaviour
 
     private GameObject player;
     private PlayerEXP player_exp;
+    private PlayerHealth player_health;
 
     void Start(){
         open_power_up = PowerUpsHandler.GetComponent<OpenPowerUp>();
-        player = GameObject.FindWithTag("Player");
-        player_exp = player.GetComponent<PlayerEXP>();
+        player        = GameObject.FindWithTag("Player");
+        player_exp    = player.GetComponent<PlayerEXP>();
+        player_health = player.GetComponent<PlayerHealth>();
     }
 
     public void ClickOption1Button(){
@@ -25,6 +27,10 @@ public class ClickOption1 : MonoBehaviour
 
             if(choice == "Danos com Explosão por 50"){
                 player_exp.power_up_explosive_bullet += 1;
+            }
+
+            if(choice == "Comprar vida por 50"){
+                player_health.AddHealth(30);
             }
 
             open_power_up.PowerUpActivated = false;

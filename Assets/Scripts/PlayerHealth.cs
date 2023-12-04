@@ -20,7 +20,6 @@ public class PlayerHealth : MonoBehaviour
         healthBar.sizeDelta = new Vector2(healthBar.sizeDelta.x,3*currentHealth/maxHealth);
 
         enemySpawning = Camera.main.gameObject.GetComponent<EnemySpawning>();
-        //Debug.Log(enemySpawning.wave);
     }
 
     private void Update(){
@@ -44,7 +43,9 @@ public class PlayerHealth : MonoBehaviour
     public void AddHealth(int Health)
     {
         currentHealth += Health;
-        maxHealth += Health;
+        if(currentHealth > maxHealth){
+            currentHealth = maxHealth;
+        }
         healthBar.sizeDelta = new Vector2(healthBar.sizeDelta.x,3*currentHealth/maxHealth);
     }
 
@@ -76,15 +77,15 @@ public class PlayerHealth : MonoBehaviour
                 i = 0;
             }
         }
-        Debug.Log(i);
-        Debug.Log("POST request successful!");
-        Debug.Log(request.downloadHandler.text); // Response from server
+        
         
 
         GameObject You_Died_Scores = Canvas.transform.Find("You_Died_Scores").gameObject;
         RectTransform You_Died_Scores_transform = You_Died_Scores.GetComponent<RectTransform>();
         TMPro.TextMeshProUGUI You_Died_Scores_text = You_Died_Scores.GetComponent<TMPro.TextMeshProUGUI>();
-        You_Died_Scores_text.text = "Melhores Scores" + "\n" + request.downloadHandler.text;
+        You_Died_Scores_text.text = "Melhores Scores" + "\n\n" + request.downloadHandler.text;
+        //You_Died_Scores_text.text = "Melhores Scores" + "\n\n" + "Infelizmente impossível ver \n os melhores Scores na versão Web";
+        
         You_Died_Scores_transform.anchoredPosition  = new Vector2(0,85);// trocar por Posição Relativa
 
         GameObject You_Died_Back_Main_Menu = Canvas.transform.Find("You_Died_Back_Main_Menu").gameObject;

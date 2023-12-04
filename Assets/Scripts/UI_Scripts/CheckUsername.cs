@@ -44,6 +44,7 @@ public class CheckUsername : MonoBehaviour
             user_info.accept = accept_bool;
             string str_info = JsonUtility.ToJson(user_info);
             Debug.Log(Application.persistentDataPath);
+            PlayerPrefs.SetString("username", username);
             System.IO.File.WriteAllText(Application.persistentDataPath + "/credentials.json", str_info);
             
             string url = "https://southamerica-east1-disco-bedrock-364702.cloudfunctions.net/add_usernames"; // Replace with your API endpoint

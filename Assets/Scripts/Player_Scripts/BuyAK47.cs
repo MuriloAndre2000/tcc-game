@@ -21,7 +21,6 @@ public class BuyAK47 : MonoBehaviour
         weapon_munition_handler = gameObject.GetComponent<WeaponMunitionHandler>();
     }
 
-
     // Update is called once per frame
     void Update()
     {

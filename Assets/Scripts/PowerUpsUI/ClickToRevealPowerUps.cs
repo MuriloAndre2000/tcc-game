@@ -12,7 +12,7 @@ public class ClickToRevealPowerUps : MonoBehaviour
 
 
     public void SortPowerUps(){
-        string[] Option1_str_options = {"Danos com Explosão por 50"};
+        string[] Option1_str_options = {"Danos com Explosão por 50", "Comprar vida por 50"};
         string[] Option2_str_options = {"Aumento do Raio de Visão por 25"};
         string[] Option3_str_options = {"Mais dano por 5", "Atirar mais rápido por 5", 
                                         "Aumentar velocidade por 5", "Balas maiores por 5"};
